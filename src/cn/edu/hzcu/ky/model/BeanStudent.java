@@ -19,6 +19,30 @@ public class BeanStudent {
     private String Major;
     private String PhoneNumber;
     private String Email;
+
+    public BeanStudent(){
+        super();
+    }
+    public BeanStudent(String StudentID,String LoginPassword){
+        super();
+        this.StudentID = StudentID;
+        this.LoginPassword = LoginPassword;
+    }
+public BeanStudent(String StudentID,String Name,String LoginPassword,String Class,String EnrollmentYear,String Major,String PhoneNumber,String Email){
+        super();
+        this.StudentID = StudentID;
+        this.Name = Name;
+        this.LoginPassword = LoginPassword;
+        this.Class = Class;
+        this.EnrollmentYear = EnrollmentYear;
+        this.Major = Major;
+        this.PhoneNumber = PhoneNumber;
+        this.Email = Email;
+    }
+
+
+
+
     public String getStudentID() {
         return StudentID;
     }

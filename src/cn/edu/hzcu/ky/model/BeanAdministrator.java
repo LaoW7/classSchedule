@@ -5,6 +5,18 @@ public class BeanAdministrator {
     private String Name;
     private String LoginPassword;
 
+    public BeanAdministrator(){
+        super();
+    }
+    public BeanAdministrator(String AdministratorID,String LoginPassword){
+        super();
+        this.AdministratorID = AdministratorID;
+        this.LoginPassword = LoginPassword;
+    }
+
+
+
+
     public String getAdministratorID() {
         return AdministratorID;
     }

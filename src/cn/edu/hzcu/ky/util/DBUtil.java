@@ -1,7 +1,6 @@
 package cn.edu.hzcu.ky.util;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 /**
  * 
  * @author 王凯一
@@ -35,7 +34,7 @@ public class DBUtil {
                 }
                 return null;
         }
-        public void closeConnnection(Connection con){
+        public static void closeConnection(Connection con){
                 if(con!=null)
                         try {
                                 con.close();
