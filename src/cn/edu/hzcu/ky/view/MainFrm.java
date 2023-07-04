@@ -50,7 +50,7 @@ public class MainFrm extends JFrame {
 	public MainFrm() {
 		setTitle("选课系统");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 911, 497);
+		setBounds(100, 100, 1160, 717);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -69,7 +69,14 @@ public class MainFrm extends JFrame {
 		});
 		infoMenu.add(addcourse);
 		
-		JMenuItem mntmNewMenuItem = new JMenuItem("更新选课信息");
+		JMenuItem mntmNewMenuItem = new JMenuItem("更新开班信息");
+		mntmNewMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UpdateClassRegistrationFrm classRegistrationFrm = new UpdateClassRegistrationFrm();
+				classRegistrationFrm.setVisible(true);
+				table.add(classRegistrationFrm);
+			}
+		});
 		infoMenu.add(mntmNewMenuItem);
 		
 		JMenuItem mntmNewMenuItem_1 = new JMenuItem("更新学生信息");
@@ -95,13 +102,13 @@ public class MainFrm extends JFrame {
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addComponent(table, GroupLayout.DEFAULT_SIZE, 887, Short.MAX_VALUE)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addComponent(table, GroupLayout.DEFAULT_SIZE, 1126, Short.MAX_VALUE)
+					.addContainerGap())
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addComponent(table, GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
-					.addContainerGap())
+				.addComponent(table, GroupLayout.DEFAULT_SIZE, 647, Short.MAX_VALUE)
 		);
 		contentPane.setLayout(gl_contentPane);
 	}

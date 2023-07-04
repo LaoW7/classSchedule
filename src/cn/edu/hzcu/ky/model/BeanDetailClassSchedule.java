@@ -8,14 +8,24 @@ package cn.edu.hzcu.ky.model;
  * 
  */
 public class BeanDetailClassSchedule {
-    private String ClassScheduleID;
+    private int ClassScheduleID;
     private String SerialNumber;
     private String TimeSlot;
     private String WeekID;
-    public String getClassScheduleID() {
+
+    public BeanDetailClassSchedule() {
+    }
+    public BeanDetailClassSchedule(int classScheduleID, String timeSlot,
+            String weekID) {
+        ClassScheduleID = classScheduleID;
+        TimeSlot = timeSlot;
+        WeekID = weekID;
+    }
+
+    public int getClassScheduleID() {
         return ClassScheduleID;
     }
-    public void setClassScheduleID(String classScheduleID) {
+    public void setClassScheduleID(int classScheduleID) {
         ClassScheduleID = classScheduleID;
     }
     public String getSerialNumber() {
