@@ -53,6 +53,7 @@ public class MainFrm extends JFrame {
 		setBounds(100, 100, 1160, 717);
 		
 		JMenuBar menuBar = new JMenuBar();
+		menuBar.setToolTipText("选课");
 		setJMenuBar(menuBar);
 		
 		JMenu infoMenu = new JMenu("信息维护");
@@ -92,13 +93,33 @@ public class MainFrm extends JFrame {
 		JMenu kaoqin = new JMenu("考勤");
 		menuBar.add(kaoqin);
 		
-		JMenu kaoqinchaxun = new JMenu("考勤查询");
-		menuBar.add(kaoqinchaxun);
+		JMenuItem mntmNewMenuItem_2 = new JMenuItem("添加考勤");
+		kaoqin.add(mntmNewMenuItem_2);
+		
+		JMenuItem mntmNewMenuItem_3 = new JMenuItem("查询考勤");
+		kaoqin.add(mntmNewMenuItem_3);
+		
+		JMenu mnNewMenu = new JMenu("选课");
+		mnNewMenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new SelectClassFrm().setVisible(true);
+			}
+		});
+		menuBar.add(mnNewMenu);
+		
+		JMenuItem mntmNewMenuItem_4 = new JMenuItem("选课系统");
+		mntmNewMenuItem_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new SelectClassFrm().setVisible(true);
+			}
+		});
+		mnNewMenu.add(mntmNewMenuItem_4);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
 		table = new JTable();
+		table.setColumnSelectionAllowed(true);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)

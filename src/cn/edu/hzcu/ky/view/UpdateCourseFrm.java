@@ -85,10 +85,17 @@ public class UpdateCourseFrm extends JInternalFrame {
 				addCourseActionPerformed(e);
 			}
 		});
+		
+		JButton btnNewButton_1 = new JButton("删除选中课程");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				deleteCourseActionPerformed(e);
+			}
+		});
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 637, Short.MAX_VALUE)
+				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 807, Short.MAX_VALUE)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(194)
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
@@ -106,6 +113,10 @@ public class UpdateCourseFrm extends JInternalFrame {
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(224, Short.MAX_VALUE))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(681, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
@@ -120,13 +131,15 @@ public class UpdateCourseFrm extends JInternalFrame {
 						.addComponent(lblNewLabel_2))
 					.addGap(32)
 					.addComponent(btnNewButton)
-					.addPreferredGap(ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+					.addComponent(btnNewButton_1)
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE))
 		);
 		
 		table = new JTable();
 		table.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		table.setBackground(Color.LIGHT_GRAY);
+		table.setBackground(Color.WHITE);
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
@@ -140,7 +153,25 @@ public class UpdateCourseFrm extends JInternalFrame {
 
 	}
 
-
+	private int deleteCourseActionPerformed(ActionEvent e){
+		int i=this.table.getSelectedRow();
+		if(i<0) {
+			JOptionPane.showMessageDialog(null, "请选择课程");
+			return 0;
+		}
+		String course_id=(String) this.table.getValueAt(i, 0);
+		try {
+			(new CourseDao()).deleteCourse(course_id);
+			JOptionPane.showMessageDialog(null, "删除成功");
+			//removeRow(i);
+			fillCourseTable(new BeanCourse());
+			return 1;
+		}
+		catch(BaseException ex){
+			JOptionPane.showMessageDialog(null, ex.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
+			return 0;
+		}
+	}
 
 	private int addCourseActionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -160,6 +191,7 @@ public class UpdateCourseFrm extends JInternalFrame {
 		try {
 			(new CourseDao()).addCourse(bc);
 			JOptionPane.showMessageDialog(null, "添加成功");
+			fillCourseTable(new BeanCourse());
 			return 1;
 		}
 		catch(BaseException e2) {

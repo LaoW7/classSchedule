@@ -47,6 +47,39 @@ public class CourseDao {
             }
         }
     }
+
+    public void deleteCourse(String CourseID) throws BaseException{
+        Connection conn = null;
+        try {
+            conn = DBUtil.getConnection();
+            String sql = "select * from course where CourseID = ?";
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, CourseID);
+            java.sql.ResultSet rs = pst.executeQuery();
+            if(!rs.next()){
+                throw new BaseException("课程不存在");
+            }
+            rs.close();
+            pst.close();
+            sql = "delete from course where CourseID = ?";
+            pst = conn.prepareStatement(sql);
+            pst.setString(1, CourseID);
+            pst.execute();
+            pst.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DbException(e);
+        } finally{
+            if(conn!=null){
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     public void addCourse(BeanCourse course) throws BaseException{
         Connection conn = null;
         try {
