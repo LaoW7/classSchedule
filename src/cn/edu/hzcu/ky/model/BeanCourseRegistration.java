@@ -1,7 +1,7 @@
 package cn.edu.hzcu.ky.model;
 /*
  * 课程注册表
- * `RegistrationID` varchar(255) NOT NULL,
+ * `RegistrationID` int(11) NOT NULL,
   `StudentID` varchar(255) DEFAULT NULL,
   `CourseID` varchar(255) DEFAULT NULL,
   `Semester` varchar(255) DEFAULT NULL,
@@ -9,17 +9,17 @@ package cn.edu.hzcu.ky.model;
   `TimeSlot` varchar(255) DEFAULT NULL,
  */
 public class BeanCourseRegistration {
-    private String RegistrationID;
+    private int RegistrationID;
     private String StudentID;
     private String CourseID;
     private String Semester;
     private int FullWeek;
     private String TimeSlot;
 
-    public String getRegistrationID() {
+    public int getRegistrationID() {
         return RegistrationID;
     }
-    public void setRegistrationID(String registrationID) {
+    public void setRegistrationID(int registrationID) {
         RegistrationID = registrationID;
     }
     public String getStudentID() {

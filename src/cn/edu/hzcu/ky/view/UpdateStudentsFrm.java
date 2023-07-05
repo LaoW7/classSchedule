@@ -106,11 +106,10 @@ public class UpdateStudentsFrm extends JInternalFrame {
 		btnNewButton = new JButton("保存");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(isAdmin=true){
-					
-					addActionPerformed(e);
-				}else{
+				if(isAdmin==false) {
 					updateActionPerformed(e);
+				}else{
+					addActionPerformed(e);
 				}
 			}
 		});
@@ -188,6 +187,10 @@ public class UpdateStudentsFrm extends JInternalFrame {
 		getContentPane().setLayout(groupLayout);
 
 		fillPane();
+		System.out.println(isAdmin);
+		if(isAdmin==true){
+			textField.setEditable(true);
+		}
 	}
 		/*
 	 * 添加信息
@@ -336,6 +339,8 @@ public class UpdateStudentsFrm extends JInternalFrame {
 				textField_5.setText(rs.getString(6));//Major
 				textField_6.setText(rs.getString(7));//PhoneNumber
 				textField_7.setText(rs.getString(8));//Email
+			}else{
+					isAdmin=true;
 			}
 		} catch (Exception e) {
 			// TODO: handle exception

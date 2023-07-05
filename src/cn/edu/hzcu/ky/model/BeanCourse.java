@@ -9,6 +9,16 @@ public class BeanCourse {
     private String CourseID;
     private String CourseName;
     private double Credits;
+
+    public BeanCourse() {
+    }
+    public BeanCourse(String courseID, String courseName, double credits) {
+        CourseID = courseID;
+        CourseName = courseName;
+        Credits = credits;
+    }
+
+
     public String getCourseID() {
         return CourseID;
     }

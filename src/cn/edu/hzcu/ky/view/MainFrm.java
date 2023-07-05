@@ -50,9 +50,10 @@ public class MainFrm extends JFrame {
 	public MainFrm() {
 		setTitle("选课系统");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 911, 497);
+		setBounds(100, 100, 1160, 717);
 		
 		JMenuBar menuBar = new JMenuBar();
+		menuBar.setToolTipText("选课");
 		setJMenuBar(menuBar);
 		
 		JMenu infoMenu = new JMenu("信息维护");
@@ -69,7 +70,14 @@ public class MainFrm extends JFrame {
 		});
 		infoMenu.add(addcourse);
 		
-		JMenuItem mntmNewMenuItem = new JMenuItem("更新选课信息");
+		JMenuItem mntmNewMenuItem = new JMenuItem("更新开班信息");
+		mntmNewMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UpdateClassRegistrationFrm classRegistrationFrm = new UpdateClassRegistrationFrm();
+				classRegistrationFrm.setVisible(true);
+				table.add(classRegistrationFrm);
+			}
+		});
 		infoMenu.add(mntmNewMenuItem);
 		
 		JMenuItem mntmNewMenuItem_1 = new JMenuItem("更新学生信息");
@@ -85,23 +93,43 @@ public class MainFrm extends JFrame {
 		JMenu kaoqin = new JMenu("考勤");
 		menuBar.add(kaoqin);
 		
-		JMenu kaoqinchaxun = new JMenu("考勤查询");
-		menuBar.add(kaoqinchaxun);
+		JMenuItem mntmNewMenuItem_2 = new JMenuItem("添加考勤");
+		kaoqin.add(mntmNewMenuItem_2);
+		
+		JMenuItem mntmNewMenuItem_3 = new JMenuItem("查询考勤");
+		kaoqin.add(mntmNewMenuItem_3);
+		
+		JMenu mnNewMenu = new JMenu("选课");
+		mnNewMenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new SelectClassFrm().setVisible(true);
+			}
+		});
+		menuBar.add(mnNewMenu);
+		
+		JMenuItem mntmNewMenuItem_4 = new JMenuItem("选课系统");
+		mntmNewMenuItem_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new SelectClassFrm().setVisible(true);
+			}
+		});
+		mnNewMenu.add(mntmNewMenuItem_4);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
 		table = new JTable();
+		table.setColumnSelectionAllowed(true);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addComponent(table, GroupLayout.DEFAULT_SIZE, 887, Short.MAX_VALUE)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addComponent(table, GroupLayout.DEFAULT_SIZE, 1126, Short.MAX_VALUE)
+					.addContainerGap())
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addComponent(table, GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
-					.addContainerGap())
+				.addComponent(table, GroupLayout.DEFAULT_SIZE, 647, Short.MAX_VALUE)
 		);
 		contentPane.setLayout(gl_contentPane);
 	}

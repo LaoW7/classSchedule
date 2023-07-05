@@ -1,16 +1,26 @@
 package cn.edu.hzcu.ky.model;
 
 public class BeanClassSchedule {
-    private String ClassScheduleID;
+    private int ClassScheduleID;
     private String CourseID;
     private String ClassName;
     private String Semester;
     private int IsSpecial;
 
-    public String getClassScheduleID() {
+    public BeanClassSchedule() {
+    }
+    public BeanClassSchedule( String courseID, String className, String semester,
+            int isSpecial) {
+        CourseID = courseID;
+        ClassName = className;
+        Semester = semester;
+        IsSpecial = isSpecial;
+    }
+
+    public int getClassScheduleID() {
         return ClassScheduleID;
     }
-    public void setClassScheduleID(String classScheduleID) {
+    public void setClassScheduleID(int classScheduleID) {
         ClassScheduleID = classScheduleID;
     }
     public String getCourseID() {
