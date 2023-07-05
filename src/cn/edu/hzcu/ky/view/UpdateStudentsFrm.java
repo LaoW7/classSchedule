@@ -284,7 +284,6 @@ public class UpdateStudentsFrm extends JInternalFrame {
 			return;
 		}
 		updateInfo(studentID,studentName,loginpwd,class1,enrollmentYear,major,phoneNumber,email);
-		BeanStudent student = new BeanStudent();
 	}
 
 

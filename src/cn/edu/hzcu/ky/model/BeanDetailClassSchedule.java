@@ -1,7 +1,7 @@
 package cn.edu.hzcu.ky.model;
 /*
  * 课程表
- * `ClassScheduleID` varchar(255) DEFAULT NULL,
+ * `ClassScheduleID` int(11) DEFAULT NULL,
   `SerialNumber` varchar(255) DEFAULT NULL,
   `TimeSlot` varchar(255) DEFAULT NULL,
   `WeekID` varchar(255) DEFAULT NULL,

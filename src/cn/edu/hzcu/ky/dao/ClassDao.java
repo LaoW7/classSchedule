@@ -10,12 +10,14 @@ import cn.edu.hzcu.ky.model.BeanDetailClassSchedule;
 import cn.edu.hzcu.ky.util.BaseException;
 import cn.edu.hzcu.ky.util.DBUtil;
 import cn.edu.hzcu.ky.util.DbException;
+import cn.edu.hzcu.ky.view.LoginOnFrm;
+
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
 public class ClassDao {
     public static int addClassSchedule(BeanClassSchedule classSchedule) {
         int id = 0;
-    Connection conn = null;
+        Connection conn = null;
     try {
         conn = DBUtil.getConnection();
         String sql = "insert into classschedule(CourseID, ClassName, Semester, IsSpecial) values (?, ?, ?, ?)";
@@ -85,6 +87,31 @@ public class ClassDao {
 
         
      }
+     public static  ResultSet loadYourAllClass(Connection conn) throws SQLException{
+        String sql="SELECT\r\n" + //
+                "classschedule.ClassName,\r\n" + //
+                "classschedule.IsSpecial,\r\n" + //
+                "classschedule.Semester,\r\n" + //
+                "timeslot.TimeSlotName,\r\n" + //
+                "`week`.WeekName\r\n" + //
+                "FROM\r\n" + //
+                "courseregistration\r\n" + //
+                "INNER JOIN detailedclassschedule ON courseregistration.TimeSlot = detailedclassschedule.TimeSlot\r\n" + //
+                "INNER JOIN timeslot ON detailedclassschedule.TimeSlot = timeslot.TimeSlotID\r\n" + //
+                "INNER JOIN classschedule ON courseregistration.Semester = classschedule.Semester AND detailedclassschedule.ClassScheduleID = classschedule.ClassScheduleID\r\n" + //
+                "INNER JOIN `week` ON detailedclassschedule.WeekID = `week`.WeekID\r\n" + //
+                "WHERE\r\n" + //
+                "    courseregistration.StudentID = ? \r\n" + //
+                "    AND courseregistration.CourseID = classschedule.CourseID\r\n" + //
+                "";
+        PreparedStatement pst = conn.prepareStatement(sql);
+        pst.setString(1,LoginOnFrm.userid);
+        //System.out.println(LoginOnFrm.userid);
+        ResultSet rs = pst.executeQuery();
+        return rs;
+     }
+
+
      public static  ResultSet loadAllClass(Connection conn) throws SQLException {
             String sql = "SELECT\r\n" + //
                     "classschedule.CourseID AS CourseID,\r\n" + //

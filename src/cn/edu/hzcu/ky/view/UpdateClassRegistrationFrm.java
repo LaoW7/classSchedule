@@ -10,14 +10,23 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import cn.edu.hzcu.ky.dao.ClassDao;
+import cn.edu.hzcu.ky.dao.CourseDao;
 import cn.edu.hzcu.ky.model.BeanClassSchedule;
+import cn.edu.hzcu.ky.model.BeanCourse;
 import cn.edu.hzcu.ky.model.BeanDetailClassSchedule;
+import cn.edu.hzcu.ky.util.DBUtil;
 
 import javax.swing.JRadioButton;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.Vector;
 import java.awt.event.ActionEvent;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class UpdateClassRegistrationFrm extends JInternalFrame {
 	private JTextField textField;
@@ -31,8 +40,6 @@ public class UpdateClassRegistrationFrm extends JInternalFrame {
 	private JRadioButton timeRadioButton_3;
 	private JRadioButton timeRadioButton_4;
 	private JRadioButton timeRadioButton_5;
-	private JRadioButton timeRadioButton_6;
-	private JRadioButton timeRadioButton_7;
 	private JRadioButton dayRadioButton_1;
 	private JRadioButton dayRadioButton_2;
 	private JRadioButton dayRadioButton_3;
@@ -40,6 +47,8 @@ public class UpdateClassRegistrationFrm extends JInternalFrame {
 	private JRadioButton dayRadioButton_5;
 	private JRadioButton dayRadioButton_6;
 	private JRadioButton dayRadioButton_7;
+	private JScrollPane scrollPane;
+	private JTable table;
 	
 
 
@@ -69,171 +78,137 @@ public class UpdateClassRegistrationFrm extends JInternalFrame {
 		setBounds(100, 100, 857, 470);
 		
 		JLabel lblNewLabel = new JLabel("开班课程ID：");
+		lblNewLabel.setBounds(39, 65, 84, 15);
 		
 		textField = new JTextField();
+		textField.setBounds(133, 62, 66, 21);
 		textField.setColumns(10);
 		
 		textField_1 = new JTextField();
+		textField_1.setBounds(133, 118, 122, 21);
 		textField_1.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("班级名：");
+		lblNewLabel_1.setBounds(70, 121, 48, 15);
 		
 		JLabel lblNewLabel_2 = new JLabel("开班学期：");
+		lblNewLabel_2.setBounds(61, 173, 60, 15);
 		
 		textField_2 = new JTextField();
+		textField_2.setBounds(131, 170, 66, 21);
 		textField_2.setColumns(10);
 		
 		JLabel lblNewLabel_3 = new JLabel("是否为特色班？");
+		lblNewLabel_3.setBounds(250, 65, 123, 15);
 		
 		SpeciallRadioButton_yes = new JRadioButton("是");
+		SpeciallRadioButton_yes.setBounds(373, 61, 48, 23);
 		
 		SpeciallRadioButton_no = new JRadioButton("否");
+		SpeciallRadioButton_no.setBounds(439, 61, 52, 23);
 		
 		JLabel lblNewLabel_4 = new JLabel("开班时段：");
+		lblNewLabel_4.setBounds(61, 234, 60, 15);
 		
 		timeRadioButton_1 = new JRadioButton("一二节");
+		timeRadioButton_1.setBounds(127, 230, 92, 23);
 		
 		timeRadioButton_2 = new JRadioButton("三四节");
+		timeRadioButton_2.setBounds(219, 230, 93, 23);
 		
 		timeRadioButton_3 = new JRadioButton("三四五节");
+		timeRadioButton_3.setBounds(312, 230, 93, 23);
 		
 		timeRadioButton_4 = new JRadioButton("六七节");
+		timeRadioButton_4.setBounds(405, 230, 88, 23);
 		
 		timeRadioButton_5 = new JRadioButton("八九节");
+		timeRadioButton_5.setBounds(493, 230, 101, 23);
 		
 		JLabel lblNewLabel_5 = new JLabel("开班日：");
+		lblNewLabel_5.setBounds(73, 275, 57, 15);
 		
 		 dayRadioButton_1 = new JRadioButton("周一");
+		 dayRadioButton_1.setBounds(127, 271, 72, 23);
 		
 		dayRadioButton_2 = new JRadioButton("周二");
+		dayRadioButton_2.setBounds(219, 271, 72, 23);
 		
 		dayRadioButton_3 = new JRadioButton("周三");
+		dayRadioButton_3.setBounds(312, 271, 72, 23);
 		
 		dayRadioButton_4 = new JRadioButton("周四");
+		dayRadioButton_4.setBounds(405, 271, 72, 23);
 		
 		dayRadioButton_5 = new JRadioButton("周五");
+		dayRadioButton_5.setBounds(493, 271, 72, 23);
 		
 		dayRadioButton_6 = new JRadioButton("周六");
+		dayRadioButton_6.setBounds(594, 271, 72, 23);
 		
 		dayRadioButton_7 = new JRadioButton("周天");
+		dayRadioButton_7.setBounds(668, 271, 76, 23);
 		
 		JButton btnNewButton = new JButton("开班");
+		btnNewButton.setBounds(108, 356, 95, 23);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ClassActionPerformed(e);
 				
 			}
 		});
-		GroupLayout groupLayout = new GroupLayout(getContentPane());
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(49)
-							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGap(51)
-							.addComponent(lblNewLabel_3, GroupLayout.PREFERRED_SIZE, 123, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(SpeciallRadioButton_yes, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(SpeciallRadioButton_no, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addGroup(groupLayout.createSequentialGroup()
-									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-										.addGroup(groupLayout.createSequentialGroup()
-											.addGap(70)
-											.addComponent(lblNewLabel_1))
-										.addGroup(groupLayout.createSequentialGroup()
-											.addGap(61)
-											.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-												.addComponent(lblNewLabel_4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-												.addComponent(lblNewLabel_2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-										.addGroup(groupLayout.createSequentialGroup()
-											.addGap(12)
-											.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE))
-										.addGroup(groupLayout.createSequentialGroup()
-											.addPreferredGap(ComponentPlacement.UNRELATED)
-											.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-										.addGroup(groupLayout.createSequentialGroup()
-											.addPreferredGap(ComponentPlacement.UNRELATED)
-											.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-												.addComponent(dayRadioButton_1)
-												.addComponent(timeRadioButton_1, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE))
-											.addPreferredGap(ComponentPlacement.RELATED)
-											.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-												.addComponent(dayRadioButton_2)
-												.addComponent(timeRadioButton_2, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE))
-											.addPreferredGap(ComponentPlacement.RELATED)
-											.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-												.addComponent(dayRadioButton_3, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
-												.addComponent(timeRadioButton_3, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE))
-											.addPreferredGap(ComponentPlacement.RELATED)
-											.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-												.addComponent(dayRadioButton_4)
-												.addComponent(timeRadioButton_4, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE))
-											.addPreferredGap(ComponentPlacement.RELATED)
-											.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-												.addComponent(timeRadioButton_5, GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE)
-												.addComponent(dayRadioButton_5, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)))))
-								.addGroup(groupLayout.createSequentialGroup()
-									.addGap(73)
-									.addComponent(lblNewLabel_5, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(dayRadioButton_6, GroupLayout.PREFERRED_SIZE, 72, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(dayRadioButton_7, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(108)
-							.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap(118, Short.MAX_VALUE))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(61)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNewLabel_3)
-						.addComponent(SpeciallRadioButton_yes)
-						.addComponent(SpeciallRadioButton_no))
-					.addGap(34)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel_1)
-						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(31)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel_2)
-						.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(39)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel_4)
-						.addComponent(timeRadioButton_1)
-						.addComponent(timeRadioButton_2)
-						.addComponent(timeRadioButton_3)
-						.addComponent(timeRadioButton_4)
-						.addComponent(timeRadioButton_5))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel_5)
-						.addComponent(dayRadioButton_1)
-						.addComponent(dayRadioButton_2)
-						.addComponent(dayRadioButton_3)
-						.addComponent(dayRadioButton_4)
-						.addComponent(dayRadioButton_5)
-						.addComponent(dayRadioButton_6)
-						.addComponent(dayRadioButton_7))
-					.addPreferredGap(ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
-					.addComponent(btnNewButton)
-					.addGap(62))
-		);
-		getContentPane().setLayout(groupLayout);
-
+		getContentPane().setLayout(null);
+		getContentPane().add(lblNewLabel);
+		getContentPane().add(textField);
+		getContentPane().add(lblNewLabel_3);
+		getContentPane().add(SpeciallRadioButton_yes);
+		getContentPane().add(SpeciallRadioButton_no);
+		getContentPane().add(lblNewLabel_1);
+		getContentPane().add(lblNewLabel_4);
+		getContentPane().add(lblNewLabel_2);
+		getContentPane().add(textField_1);
+		getContentPane().add(textField_2);
+		getContentPane().add(dayRadioButton_1);
+		getContentPane().add(timeRadioButton_1);
+		getContentPane().add(dayRadioButton_2);
+		getContentPane().add(timeRadioButton_2);
+		getContentPane().add(dayRadioButton_3);
+		getContentPane().add(timeRadioButton_3);
+		getContentPane().add(dayRadioButton_4);
+		getContentPane().add(timeRadioButton_4);
+		getContentPane().add(timeRadioButton_5);
+		getContentPane().add(dayRadioButton_5);
+		getContentPane().add(lblNewLabel_5);
+		getContentPane().add(dayRadioButton_6);
+		getContentPane().add(dayRadioButton_7);
+		getContentPane().add(btnNewButton);
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(493, 47, 319, 177);
+		getContentPane().add(scrollPane);
+		
+		table = new JTable();
+		table.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"\u8BFE\u7A0BID", "\u8BFE\u7A0B\u540D", "\u5B66\u5206"
+			}
+		) {
+			boolean[] columnEditables = new boolean[] {
+				false, false, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
+		scrollPane.setViewportView(table);
+		
+		JLabel lblNewLabel_6 = new JLabel("可开班的课程：");
+		lblNewLabel_6.setBounds(493, 22, 101, 15);
+		getContentPane().add(lblNewLabel_6);
+		
+		fillCourseTable(new BeanCourse());
 	}
 	
 	
@@ -307,6 +282,31 @@ public class UpdateClassRegistrationFrm extends JInternalFrame {
 			int id=ClassDao.addClassSchedule(bcs);
 			BeanDetailClassSchedule bdcs = new BeanDetailClassSchedule(id,time,day);
 			ClassDao.addDetailClassSchedule(bdcs);
+
+		}
+	}
+		
+	
+	private void fillCourseTable(BeanCourse beancourse){
+		DefaultTableModel dtm = (DefaultTableModel)table.getModel();
+		dtm.setRowCount(0);
+		Connection conn=null;
+
+		try {
+			conn=DBUtil.getConnection();
+			ResultSet rs = CourseDao.loadAllCourse(conn);
+			//Set<Integer> set = new HashSet<>();
+			//System.out.println("测试1");
+			while(rs.next()){
+				Vector<String> v = new Vector<>();
+				v.add(rs.getString(1));
+				v.add(rs.getString(2));
+				v.add(rs.getString(3));
+				//System.out.println(rs.getString(1));
+				dtm.addRow(v);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
 	}
 }
