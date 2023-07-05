@@ -61,25 +61,33 @@ public class UpdateCourseFrm extends JInternalFrame {
 		setBounds(100, 100, 817, 455);
 		
 		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(0, 203, 807, 223);
 		scrollPane.setEnabled(false);
 		
 		JLabel lblNewLabel = new JLabel("课程ID");
+		lblNewLabel.setBounds(157, 63, 43, 15);
 		
 		textField = new JTextField();
+		textField.setBounds(204, 60, 66, 21);
 		textField.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("课程名字");
+		lblNewLabel_1.setBounds(293, 66, 66, 15);
 		
 		textField_1 = new JTextField();
+		textField_1.setBounds(363, 63, 66, 21);
 		textField_1.setText("");
 		textField_1.setColumns(10);
 		
 		JLabel lblNewLabel_2 = new JLabel("学分");
+		lblNewLabel_2.setBounds(476, 63, 37, 15);
 		
 		textField_2 = new JTextField();
+		textField_2.setBounds(517, 60, 66, 21);
 		textField_2.setColumns(10);
 		
 		JButton btnNewButton = new JButton("添加课程");
+		btnNewButton.setBounds(351, 113, 95, 23);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addCourseActionPerformed(e);
@@ -87,55 +95,13 @@ public class UpdateCourseFrm extends JInternalFrame {
 		});
 		
 		JButton btnNewButton_1 = new JButton("删除选中课程");
+		btnNewButton_1.setBounds(10, 174, 116, 23);
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				deleteCourseActionPerformed(e);
 			}
 		});
-		GroupLayout groupLayout = new GroupLayout(getContentPane());
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 807, Short.MAX_VALUE)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(194)
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-					.addGap(30)
-					.addComponent(lblNewLabel_2, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(224, Short.MAX_VALUE))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(681, Short.MAX_VALUE))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(60)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNewLabel_1)
-						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNewLabel_2))
-					.addGap(32)
-					.addComponent(btnNewButton)
-					.addPreferredGap(ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
-					.addComponent(btnNewButton_1)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE))
-		);
+		getContentPane().setLayout(null);
 		
 		table = new JTable();
 		table.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -148,7 +114,15 @@ public class UpdateCourseFrm extends JInternalFrame {
 			}
 		));
 		scrollPane.setViewportView(table);
-		getContentPane().setLayout(groupLayout);
+		getContentPane().add(scrollPane);
+		getContentPane().add(btnNewButton);
+		getContentPane().add(lblNewLabel);
+		getContentPane().add(textField);
+		getContentPane().add(lblNewLabel_1);
+		getContentPane().add(textField_1);
+		getContentPane().add(lblNewLabel_2);
+		getContentPane().add(textField_2);
+		getContentPane().add(btnNewButton_1);
 		fillCourseTable(new BeanCourse());
 
 	}

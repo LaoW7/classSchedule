@@ -119,7 +119,6 @@ public class CourseDao {
 
 
         public static void main(String[] args) throws SQLException {
-            BeanCourse course = new BeanCourse();
             Connection conn = null;
             ResultSet rSet = null;
             try {

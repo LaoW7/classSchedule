@@ -25,7 +25,6 @@ import javax.swing.JTable;
 public class MainFrm extends JFrame {
 
 	private JPanel contentPane;
-	private JPanel detailPanel; // 用于显示详细操作的面板
 	private JTable table;
 
 	/**
@@ -93,10 +92,22 @@ public class MainFrm extends JFrame {
 		JMenu kaoqin = new JMenu("考勤");
 		menuBar.add(kaoqin);
 		
-		JMenuItem mntmNewMenuItem_2 = new JMenuItem("添加考勤");
+		JMenuItem mntmNewMenuItem_2 = new JMenuItem("更新考勤信息");
+		mntmNewMenuItem_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UpdateAttendanceFrm attendanceFrm = new UpdateAttendanceFrm();
+				attendanceFrm.setVisible(true);
+				table.add(attendanceFrm);
+			}
+		});
 		kaoqin.add(mntmNewMenuItem_2);
 		
-		JMenuItem mntmNewMenuItem_3 = new JMenuItem("查询考勤");
+		JMenuItem mntmNewMenuItem_3 = new JMenuItem("查询考勤信息");
+		mntmNewMenuItem_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 		kaoqin.add(mntmNewMenuItem_3);
 		
 		JMenu mnNewMenu = new JMenu("选课");

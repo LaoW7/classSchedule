@@ -35,7 +35,7 @@ public class LoginOnFrm extends JFrame {
 	private JPanel contentPane;
 	private JTextField textField;
 	private JTextField textField_1;
-	private JComboBox comboBox;
+	private JComboBox<String> comboBox;
 	private StudentDao studentDao = new StudentDao();
 	private AdministratorDao administratorDao = new AdministratorDao();
 
@@ -60,26 +60,32 @@ public class LoginOnFrm extends JFrame {
 	 */
 	public LoginOnFrm() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 354);
+		setBounds(100, 100, 425, 337);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
 		JLabel lblNewLabel = new JLabel("账号");
+		lblNewLabel.setBounds(61, 125, 55, 32);
 		lblNewLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		
 		JLabel lblNewLabel_1 = new JLabel("密码");
+		lblNewLabel_1.setBounds(61, 178, 51, 15);
 		
 		textField = new JTextField();
+		textField.setBounds(120, 131, 139, 21);
 		textField.setColumns(10);
 		
 		textField_1 = new JTextField();
+		textField_1.setBounds(120, 175, 139, 21);
 		textField_1.setColumns(10);
 		
-		JLabel lblNewLabel_2 = new JLabel("选课系统");
+		JLabel lblNewLabel_2 = new JLabel("选课考勤系统");
+		lblNewLabel_2.setBounds(123, 54, 158, 43);
 		lblNewLabel_2.setFont(new Font("楷体", Font.PLAIN, 26));
 		
 		JButton btnNewButton = new JButton("登录");
+		btnNewButton.setBounds(83, 219, 95, 23);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				loginActionPerformed(arg0);
@@ -87,6 +93,7 @@ public class LoginOnFrm extends JFrame {
 		});
 		
 		JButton btnNewButton_1 = new JButton("重置");
+		btnNewButton_1.setBounds(213, 219, 95, 23);
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg1) {
 				resetActionPerformed(arg1);
@@ -94,65 +101,25 @@ public class LoginOnFrm extends JFrame {
 		});
 		
 		JLabel lblNewLabel_3 = new JLabel("用户类别");
+		lblNewLabel_3.setBounds(269, 134, 57, 15);
 		
-		comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"学生", "管理员"}));
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(173)
-					.addComponent(lblNewLabel_2, GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
-					.addGap(127))
-				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
-					.addGap(56)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createSequentialGroup()
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-									.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
-									.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE))
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-									.addComponent(textField_1, GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
-									.addComponent(textField, GroupLayout.PREFERRED_SIZE, 139, GroupLayout.PREFERRED_SIZE)))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(lblNewLabel_3, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
-							.addGap(35)
-							.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGap(67))
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(48)
-					.addComponent(lblNewLabel_2, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE)
-					.addGap(29)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNewLabel_3)
-						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNewLabel_1))
-					.addGap(18)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnNewButton)
-						.addComponent(btnNewButton_1))
-					.addContainerGap(75, Short.MAX_VALUE))
-		);
-		contentPane.setLayout(gl_contentPane);
+		comboBox = new JComboBox<String>();
+		comboBox.setBounds(330, 131, 63, 21);
+		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"学生", "管理员"}));
+
+		contentPane.setLayout(null);
+		contentPane.add(lblNewLabel_2);
+		contentPane.add(lblNewLabel_1);
+		contentPane.add(lblNewLabel);
+		contentPane.add(textField_1);
+		contentPane.add(textField);
+		contentPane.add(lblNewLabel_3);
+		contentPane.add(btnNewButton);
+		contentPane.add(btnNewButton_1);
+		contentPane.add(comboBox);
 	}
 
 	protected void resetActionPerformed(ActionEvent arg1) {//清空账号和密码
-		// TODO Auto-generated method stub
 		this.textField.setText("");
 		this.textField_1.setText("");
 	}

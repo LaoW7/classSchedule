@@ -25,6 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Window.Type;
 
 public class SelectClassFrm extends JFrame {
 
@@ -35,6 +36,7 @@ public class SelectClassFrm extends JFrame {
 	String courseid1;
 	String term1;
 	String timeslot1;
+	private JTable table_1;
 
 	/**
 	 * Launch the application.
@@ -57,25 +59,30 @@ public class SelectClassFrm extends JFrame {
 	 */
 	public SelectClassFrm() {
 		setTitle("选课");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 717, 508);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
 		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(15, 214, 702, 242);
 		
 		JLabel lblNewLabel = new JLabel("你好，");
+		lblNewLabel.setBounds(15, 56, 43, 15);
 		
 		JLabel lblNewLabel_1 = new JLabel("欢迎你选课。");
+		lblNewLabel_1.setBounds(131, 56, 104, 15);
 		
 		JLabel lblNewLabel_2 = new JLabel(LoginOnFrm.userid);
+		//System.err.println(LoginOnFrm.userid);
+		lblNewLabel_2.setBounds(57, 56, 64, 15);
 		
-		JLabel lblNewLabel_4 = new JLabel("您选中的课程是：");
-		
-		JLabel selectInfo = new JLabel(classname);
+		JLabel lblNewLabel_4 = new JLabel("点击下方课程进行选课：");
+		lblNewLabel_4.setBounds(15, 135, 137, 15);
 		
 		JButton btnNewButton = new JButton("选课");
+		btnNewButton.setBounds(15, 161, 95, 23);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				getSelectedRowData();
@@ -83,44 +90,26 @@ public class SelectClassFrm extends JFrame {
 			}
 		});
 		
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 702, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lblNewLabel_2, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
-							.addGap(36)
-							.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(lblNewLabel_4)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(selectInfo, GroupLayout.PREFERRED_SIZE, 112, GroupLayout.PREFERRED_SIZE))
-						.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(44)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel)
-						.addComponent(lblNewLabel_1)
-						.addComponent(lblNewLabel_2))
-					.addPreferredGap(ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel_4)
-						.addComponent(selectInfo))
-					.addGap(28)
-					.addComponent(btnNewButton)
-					.addGap(30)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 242, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap())
-		);
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(298, 33, 391, 175);
+		
+		JLabel lblNewLabel_3 = new JLabel("你的选课信息：");
+		lblNewLabel_3.setBounds(298, 12, 108, 15);
+		
+		table_1 = new JTable();
+		table_1.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"\u8BFE\u7A0B\u540D", "\u7279\u8272\u73ED", "\u5B66\u671F", "\u65F6\u6BB5", "\u5468"
+			}
+		));
+		table_1.getColumnModel().getColumn(0).setPreferredWidth(58);
+		table_1.getColumnModel().getColumn(1).setPreferredWidth(58);
+		table_1.getColumnModel().getColumn(2).setPreferredWidth(58);
+		table_1.getColumnModel().getColumn(3).setPreferredWidth(57);
+		table_1.getColumnModel().getColumn(4).setPreferredWidth(47);
+		scrollPane_1.setViewportView(table_1);
 		
 		table = new JTable();
 		table.setModel(new DefaultTableModel(
@@ -131,13 +120,48 @@ public class SelectClassFrm extends JFrame {
 			}
 		));
 		table.getColumnModel().getColumn(2).setPreferredWidth(88);
+		contentPane.setLayout(null);
 		scrollPane.setViewportView(table);
-		contentPane.setLayout(gl_contentPane);
+		contentPane.add(scrollPane);
+		contentPane.add(lblNewLabel);
+		contentPane.add(lblNewLabel_2);
+		contentPane.add(lblNewLabel_1);
+		contentPane.add(lblNewLabel_4);
+		contentPane.add(btnNewButton);
+		contentPane.add(lblNewLabel_3);
+		contentPane.add(scrollPane_1);
 
 		fillClassTable();
-
+		fillYourClassTable();
 
 	}
+	/*
+	 * 个人课表Table填充数据	
+	 */
+	private void fillYourClassTable(){
+		DefaultTableModel dtm=(DefaultTableModel) table_1.getModel();
+		dtm.setRowCount(0); // 设置成0行
+		// 从数据库中查询数据
+		Connection con=null;
+		try {
+			con=DBUtil.getConnection();
+			ResultSet rs=ClassDao.loadYourAllClass(con);
+			while(rs.next()){
+				Vector<String> v=new Vector<>();
+				v.add(rs.getString(1));
+				v.add(rs.getString(2));
+				v.add(rs.getString(3));
+				v.add(rs.getString(4));
+				v.add(rs.getString(5));
+				dtm.addRow(v);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	/*
+	 * 课表Table填充数据	
+	 */
 	private void fillClassTable(){
 		DefaultTableModel dtm=(DefaultTableModel) table.getModel();
 		dtm.setRowCount(0); // 设置成0行
@@ -159,6 +183,12 @@ public class SelectClassFrm extends JFrame {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally{
+			try{
+				DBUtil.closeConnection(con);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 		}
 	}
 	//提取被选中table行的数据
@@ -179,12 +209,13 @@ public class SelectClassFrm extends JFrame {
 	private void selectActionPerformed(ActionEvent e){
 		int mod = 0;
 		mod = ClassDao.addCourseRegistration(LoginOnFrm.userid, courseid1, term1,timeslot1);
-		System.out.println(courseid1);
-		System.out.println(term1);
-		System.out.println(timeslot1);
+		// System.out.println(courseid1);
+		// System.out.println(term1);
+		// System.out.println(timeslot1);
 		if(mod==1){
 			JOptionPane.showMessageDialog(null, "选课成功！");
 			//fillSelectClassTable();
+			fillYourClassTable();
 		}else{
 			JOptionPane.showMessageDialog(null, "选课失败！");
 		}
