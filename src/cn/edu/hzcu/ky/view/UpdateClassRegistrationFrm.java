@@ -14,19 +14,25 @@ import cn.edu.hzcu.ky.dao.CourseDao;
 import cn.edu.hzcu.ky.model.BeanClassSchedule;
 import cn.edu.hzcu.ky.model.BeanCourse;
 import cn.edu.hzcu.ky.model.BeanDetailClassSchedule;
+import cn.edu.hzcu.ky.util.BaseException;
 import cn.edu.hzcu.ky.util.DBUtil;
+import cn.edu.hzcu.ky.util.DbException;
 
 import javax.swing.JRadioButton;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Vector;
 import java.awt.event.ActionEvent;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.Color;
 
 public class UpdateClassRegistrationFrm extends JInternalFrame {
 	private JTextField textField;
@@ -49,6 +55,7 @@ public class UpdateClassRegistrationFrm extends JInternalFrame {
 	private JRadioButton dayRadioButton_7;
 	private JScrollPane scrollPane;
 	private JTable table;
+	private JTable table_1;
 	
 
 
@@ -75,7 +82,7 @@ public class UpdateClassRegistrationFrm extends JInternalFrame {
 	public UpdateClassRegistrationFrm() {
 		setClosable(true);
 		setTitle("开班");
-		setBounds(100, 100, 857, 470);
+		setBounds(100, 100, 857, 534);
 		
 		JLabel lblNewLabel = new JLabel("开班课程ID：");
 		lblNewLabel.setBounds(39, 65, 84, 15);
@@ -89,10 +96,10 @@ public class UpdateClassRegistrationFrm extends JInternalFrame {
 		textField_1.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("班级名：");
-		lblNewLabel_1.setBounds(70, 121, 48, 15);
+		lblNewLabel_1.setBounds(61, 121, 57, 15);
 		
 		JLabel lblNewLabel_2 = new JLabel("开班学期：");
-		lblNewLabel_2.setBounds(61, 173, 60, 15);
+		lblNewLabel_2.setBounds(49, 173, 72, 15);
 		
 		textField_2 = new JTextField();
 		textField_2.setBounds(131, 170, 66, 21);
@@ -108,7 +115,7 @@ public class UpdateClassRegistrationFrm extends JInternalFrame {
 		SpeciallRadioButton_no.setBounds(439, 61, 52, 23);
 		
 		JLabel lblNewLabel_4 = new JLabel("开班时段：");
-		lblNewLabel_4.setBounds(61, 234, 60, 15);
+		lblNewLabel_4.setBounds(49, 234, 72, 15);
 		
 		timeRadioButton_1 = new JRadioButton("一二节");
 		timeRadioButton_1.setBounds(127, 230, 92, 23);
@@ -126,7 +133,7 @@ public class UpdateClassRegistrationFrm extends JInternalFrame {
 		timeRadioButton_5.setBounds(493, 230, 101, 23);
 		
 		JLabel lblNewLabel_5 = new JLabel("开班日：");
-		lblNewLabel_5.setBounds(73, 275, 57, 15);
+		lblNewLabel_5.setBounds(61, 275, 57, 15);
 		
 		 dayRadioButton_1 = new JRadioButton("周一");
 		 dayRadioButton_1.setBounds(127, 271, 72, 23);
@@ -150,11 +157,12 @@ public class UpdateClassRegistrationFrm extends JInternalFrame {
 		dayRadioButton_7.setBounds(668, 271, 76, 23);
 		
 		JButton btnNewButton = new JButton("开班");
-		btnNewButton.setBounds(108, 356, 95, 23);
+		btnNewButton.setForeground(Color.BLACK);
+		btnNewButton.setBounds(61, 318, 95, 23);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ClassActionPerformed(e);
-				
+				fillClassTable();
 			}
 		});
 		getContentPane().setLayout(null);
@@ -188,6 +196,14 @@ public class UpdateClassRegistrationFrm extends JInternalFrame {
 		getContentPane().add(scrollPane);
 		
 		table = new JTable();
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int row = table.getSelectedRow();
+        		textField.setText((String) table.getValueAt(row, 0));
+				
+			}
+		});
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
@@ -204,16 +220,78 @@ public class UpdateClassRegistrationFrm extends JInternalFrame {
 		});
 		scrollPane.setViewportView(table);
 		
-		JLabel lblNewLabel_6 = new JLabel("可开班的课程：");
-		lblNewLabel_6.setBounds(493, 22, 101, 15);
+		JLabel lblNewLabel_6 = new JLabel("可开班的课程：点击可直接选择👇");
+		lblNewLabel_6.setBounds(493, 22, 196, 15);
 		getContentPane().add(lblNewLabel_6);
 		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(219, 328, 618, 167);
+		getContentPane().add(scrollPane_1);
+		
+		table_1 = new JTable();
+		table_1.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"\u8BFE\u7A0BID", "\u73ED\u7EA7\u540D\u79F0", "\u5F00\u73ED\u5B66\u671F", "\u662F\u5426\u4E3A\u7279\u8272\u73ED", "\u5F00\u73ED\u65F6\u6BB5", "\u5F00\u73ED\u65E5\u671F"
+			}
+		) {
+			boolean[] columnEditables = new boolean[] {
+				false, false, false, false, false, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
+		table_1.getColumnModel().getColumn(3).setPreferredWidth(93);
+		scrollPane_1.setViewportView(table_1);
+		
+		JLabel lblNewLabel_7 = new JLabel("已经开过的班：");
+		lblNewLabel_7.setBounds(219, 303, 103, 15);
+		getContentPane().add(lblNewLabel_7);
+		
+		JLabel lblNewLabel_8 = new JLabel("选中下方班级以删除👇");
+		lblNewLabel_8.setBounds(415, 303, 137, 15);
+		getContentPane().add(lblNewLabel_8);
+		
+		JButton btnNewButton_1 = new JButton("删除开班");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int row = table_1.getSelectedRow();
+				String courseID = (String) table_1.getValueAt(row, 0);
+				String ClassName = (String) table_1.getValueAt(row, 1);
+				String Semester = (String) table_1.getValueAt(row, 2);
+				if(row<0) {
+					JOptionPane.showMessageDialog(null, "请选择要删除的班级");
+					return;
+				}
+				try {
+					int num = ClassDao.deleteCourseSchedule(courseID, ClassName, Semester);
+					if(num==0) {
+						JOptionPane.showMessageDialog(null, "该课程已被选，不能删除");
+					}else if(num==1){
+						JOptionPane.showMessageDialog(null, "删除成功");
+						fillClassTable();
+					}
+					
+				} catch (BaseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		btnNewButton_1.setForeground(Color.RED);
+		btnNewButton_1.setBounds(547, 300, 95, 23);
+		getContentPane().add(btnNewButton_1);
+		
 		fillCourseTable(new BeanCourse());
+		fillClassTable();
+
+
 	}
 	
 	
 	private void ClassActionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		//实现所有文本框不为空，每一种radioButton都有选择且只能选一个，否则弹出提示框
 		if(textField.getText().equals("")||textField_1.getText().equals("")||textField_2.getText().equals("")) {
 			JOptionPane.showMessageDialog(null, "请填写完整信息");
@@ -309,4 +387,36 @@ public class UpdateClassRegistrationFrm extends JInternalFrame {
 			// TODO: handle exception
 		}
 	}
+
+	private void fillClassTable(){
+		DefaultTableModel dtm = (DefaultTableModel)table_1.getModel();
+		dtm.setRowCount(0);
+		Connection conn=null;
+
+		try {
+			conn=DBUtil.getConnection();
+			ResultSet rs = ClassDao.loadAllClass(conn);
+			//Set<Integer> set = new HashSet<>();
+			//System.out.println("测试1");
+			while(rs.next()){
+				Vector<String> v = new Vector<>();
+				v.add(rs.getString(1));
+				v.add(rs.getString(2));
+				v.add(rs.getString(3));
+				if(rs.getInt(4)==1) {
+					v.add("是");
+				}
+				else {
+					v.add("否");
+				}
+				v.add(rs.getString(5));
+				v.add(rs.getString(6));
+				dtm.addRow(v);
+				}
+			} catch (Exception e) {
+		}
+	}
+
+	
+
 }

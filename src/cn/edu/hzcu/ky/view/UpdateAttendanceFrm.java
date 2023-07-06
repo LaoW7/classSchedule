@@ -9,6 +9,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 
 import cn.edu.hzcu.ky.dao.AttendanceDao;
+import cn.edu.hzcu.ky.dao.StudentDao;
 import cn.edu.hzcu.ky.model.BeanAttendance;
 import cn.edu.hzcu.ky.util.DBUtil;
 
@@ -16,6 +17,7 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -28,6 +30,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.MouseAdapter;
 
 public class UpdateAttendanceFrm extends JInternalFrame {
 	private JTextField textField;
@@ -40,6 +43,7 @@ public class UpdateAttendanceFrm extends JInternalFrame {
 	private JTextField textField_6;
 	private JTextField textField_7;
 	private JTable table;
+	private JTable table_1;
 
 	/**
 	 * Launch the application.
@@ -120,6 +124,7 @@ public class UpdateAttendanceFrm extends JInternalFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				updateActionPerformed(e);
+				fillAttendanceTable();
 			}
 		});
 		btnNewButton.setBounds(70, 289, 99, 28);
@@ -170,6 +175,12 @@ public class UpdateAttendanceFrm extends JInternalFrame {
 		getContentPane().add(scrollPane);
 		
 		table = new JTable();
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+			}
+		});
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
@@ -195,7 +206,40 @@ public class UpdateAttendanceFrm extends JInternalFrame {
 		});
 		btnNewButton_1.setBounds(70, 363, 99, 28);
 		getContentPane().add(btnNewButton_1);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(580, 18, 195, 220);
+		getContentPane().add(scrollPane_1);
+		
+		table_1 = new JTable();
+		table_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int row = table_1.getSelectedRow();
+        		textField.setText((String) table_1.getValueAt(row, 0));
+			}
+		});
+		table_1.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"\u5B66\u751FID", "\u5B66\u751F\u59D3\u540D"
+			}
+		) {
+			boolean[] columnEditables = new boolean[] {
+				false, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
+		scrollPane_1.setViewportView(table_1);
+		
+		JLabel lblNewLabel_6 = new JLabel("右侧可点击直接导入👉");
+		lblNewLabel_6.setBounds(45, 58, 139, 18);
+		getContentPane().add(lblNewLabel_6);
 
+		fillStudentTable();
 		fillAttendanceTable();
 
 	}
@@ -345,4 +389,30 @@ public class UpdateAttendanceFrm extends JInternalFrame {
 			}
 
 		}
+
+		private void fillStudentTable(){
+			DefaultTableModel dtm=(DefaultTableModel) table_1.getModel();
+			dtm.setRowCount(0);//设置成0行
+			Connection con=null;
+			try{
+				con=DBUtil.getConnection();
+				ResultSet rs=StudentDao.loadAllStudent(con);
+				while(rs.next()){
+					Vector<String> v=new Vector<>();
+					v.add(rs.getString("StudentID"));
+					v.add(rs.getString("Name"));
+					dtm.addRow(v);
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+			}finally{
+				try{
+					DBUtil.closeConnection(con);
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+
+		}
+
 }

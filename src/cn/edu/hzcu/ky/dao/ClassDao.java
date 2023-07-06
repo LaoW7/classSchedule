@@ -186,5 +186,59 @@ public class ClassDao {
             }
             return id;
         }
-        
+        public static int deleteCourseSchedule(String CourseID, String ClassName, String Semester) throws BaseException{
+            Connection conn = null;
+            try {
+                conn = DBUtil.getConnection();
+                String sql = "select ClassScheduleID from classschedule where CourseID = ? and ClassName = ? and Semester = ?";
+                java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+                pst.setString(1, CourseID);
+                pst.setString(2, ClassName);
+                pst.setString(3, Semester);
+                java.sql.ResultSet rs = pst.executeQuery();
+                if(!rs.next()){
+                    throw new BaseException("课程时间表不存在");
+                }
+                int classScheduleID = rs.getInt("ClassScheduleID");
+                rs.close();
+                pst.close();
+
+                // Check if the class is selected in the courseregistration table
+                sql = "select count(*) as count from courseregistration where TimeSlot in (select TimeSlot from detailedclassschedule where ClassScheduleID = ?)";
+                pst = conn.prepareStatement(sql);
+                pst.setInt(1, classScheduleID);
+                rs = pst.executeQuery();
+                if(rs.next() && rs.getInt("count") > 0){
+                    return 0;
+                }
+                rs.close();
+                pst.close();
+
+                // delete from detailedclassschedule
+                sql = "delete from detailedclassschedule where ClassScheduleID = ?";
+                pst = conn.prepareStatement(sql);
+                pst.setInt(1, classScheduleID);
+                pst.execute();
+                pst.close();
+
+                // delete from classschedule
+                sql = "delete from classschedule where ClassScheduleID = ?";
+                pst = conn.prepareStatement(sql);
+                pst.setInt(1, classScheduleID);
+                pst.execute();
+                pst.close();
+                return 1;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new DbException(e);
+            } finally{
+                if(conn!=null){
+                    try {
+                        conn.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
 }

@@ -64,5 +64,32 @@ public class AttendanceDao {
         ResultSet rs = pst.executeQuery();
         return rs;
     }
+    //AttendanceDao.searchSpecificAttendance(startYear, startMonth, startDay, startHour, startMinute, endYear, endMonth, endDay, endHour, endMinute, studentId, name, enrollmentYear, major);
+    public static ResultSet searchSpecificAttendance(String startYear,String startMonth,String startDay,String startHour,String startMinute,String endYear,String endMonth,String endDay,String endHour,String endMinute,String studentId,String name,String enrollmentYear,String major) throws SQLException{
+        Connection conn = DBUtil.getConnection();
+        String sql = "select StudentID,Date,SignInTime,SignOutTime,AttendanceType from attendance where 1=1";
+        if(startYear!=null && !startYear.equals("")){
+            sql+=" and Date>='"+startYear+"-"+startMonth+"-"+startDay+" "+startHour+":"+startMinute+":00'";
+        }
+        if(endYear!=null && !endYear.equals("")){
+            sql+=" and Date<='"+endYear+"-"+endMonth+"-"+endDay+" "+endHour+":"+endMinute+":00'";
+        }
+        if(studentId!=null && !studentId.equals("")){
+            sql+=" and StudentID='"+studentId+"'";
+        }
+        if(name!=null && !name.equals("")){
+            sql+=" and StudentID in (select StudentID from student where Name='"+name+"')";
+        }
+        if(enrollmentYear!=null && !enrollmentYear.equals("")){
+            sql+=" and StudentID in (select StudentID from student where EnrollmentYear='"+enrollmentYear+"')";
+        }
+        if(major!=null && !major.equals("")){
+            sql+=" and StudentID in (select StudentID from student where Major='"+major+"')";
+        }
+        java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+        ResultSet rs = pst.executeQuery();
+        return rs;
+        
+    }
 
 }

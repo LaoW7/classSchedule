@@ -65,25 +65,25 @@ public class UpdateCourseFrm extends JInternalFrame {
 		scrollPane.setEnabled(false);
 		
 		JLabel lblNewLabel = new JLabel("课程ID");
-		lblNewLabel.setBounds(157, 63, 43, 15);
+		lblNewLabel.setBounds(123, 47, 43, 15);
 		
 		textField = new JTextField();
-		textField.setBounds(204, 60, 66, 21);
+		textField.setBounds(170, 44, 66, 21);
 		textField.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("课程名字");
-		lblNewLabel_1.setBounds(293, 66, 66, 15);
+		lblNewLabel_1.setBounds(287, 50, 159, 15);
 		
 		textField_1 = new JTextField();
-		textField_1.setBounds(363, 63, 66, 21);
+		textField_1.setBounds(357, 47, 89, 21);
 		textField_1.setText("");
 		textField_1.setColumns(10);
 		
 		JLabel lblNewLabel_2 = new JLabel("学分");
-		lblNewLabel_2.setBounds(476, 63, 37, 15);
+		lblNewLabel_2.setBounds(486, 50, 37, 15);
 		
 		textField_2 = new JTextField();
-		textField_2.setBounds(517, 60, 66, 21);
+		textField_2.setBounds(527, 47, 66, 21);
 		textField_2.setColumns(10);
 		
 		JButton btnNewButton = new JButton("添加课程");
@@ -95,6 +95,7 @@ public class UpdateCourseFrm extends JInternalFrame {
 		});
 		
 		JButton btnNewButton_1 = new JButton("删除选中课程");
+		btnNewButton_1.setForeground(Color.RED);
 		btnNewButton_1.setBounds(10, 174, 116, 23);
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -135,7 +136,11 @@ public class UpdateCourseFrm extends JInternalFrame {
 		}
 		String course_id=(String) this.table.getValueAt(i, 0);
 		try {
-			(new CourseDao()).deleteCourse(course_id);
+			int j = CourseDao.deleteCourse(course_id);
+			if(j!=1) {
+				JOptionPane.showMessageDialog(null, "删除失败");
+				return 0;
+			}
 			JOptionPane.showMessageDialog(null, "删除成功");
 			//removeRow(i);
 			fillCourseTable(new BeanCourse());
