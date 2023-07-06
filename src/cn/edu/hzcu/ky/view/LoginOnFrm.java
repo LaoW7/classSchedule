@@ -31,6 +31,7 @@ import javax.swing.DefaultComboBoxModel;
 
 public class LoginOnFrm extends JFrame {
 	public static String userid;
+	public static boolean isAdmin=true;
 
 	private JPanel contentPane;
 	private JTextField textField;
@@ -141,6 +142,7 @@ public class LoginOnFrm extends JFrame {
 		String userType = comboBox.getSelectedItem().toString();
 		//System.out.println(userType);
 		if(userType.equals("学生")){//学生登录
+			isAdmin=false;
 			BeanStudent currentUser = new BeanStudent(userID,password);
 			Connection conn=null;
 			try {
@@ -164,6 +166,7 @@ public class LoginOnFrm extends JFrame {
 				}
 			}
 		}else{//管理员登录
+			isAdmin=true;
 			BeanAdministrator currentUser = new BeanAdministrator(userID,password);
 			Connection conn=null;
 			try {

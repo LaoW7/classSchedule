@@ -79,7 +79,7 @@ public class SelectClassFrm extends JFrame {
 		lblNewLabel_2.setBounds(57, 56, 64, 15);
 		
 		JLabel lblNewLabel_4 = new JLabel("点击下方课程进行选课：");
-		lblNewLabel_4.setBounds(15, 135, 137, 15);
+		lblNewLabel_4.setBounds(15, 135, 172, 15);
 		
 		JButton btnNewButton = new JButton("选课");
 		btnNewButton.setBounds(15, 161, 95, 23);
@@ -149,7 +149,12 @@ public class SelectClassFrm extends JFrame {
 			while(rs.next()){
 				Vector<String> v=new Vector<>();
 				v.add(rs.getString(1));
-				v.add(rs.getString(2));
+				if(rs.getInt(2)==1) {
+					v.add("是");
+				}
+				else {
+					v.add("否");
+				}
 				v.add(rs.getString(3));
 				v.add(rs.getString(4));
 				v.add(rs.getString(5));
@@ -174,7 +179,12 @@ public class SelectClassFrm extends JFrame {
 				Vector<String> v=new Vector<>();
 				v.add(rs.getString(1));
 				v.add(rs.getString(2));
-				v.add(rs.getString(4));
+				if(rs.getInt(4)==1) {
+					v.add("是");
+				}
+				else {
+					v.add("否");
+				}
 				v.add(rs.getString(3));
 				v.add(rs.getString(5));
 				v.add(rs.getString(6));

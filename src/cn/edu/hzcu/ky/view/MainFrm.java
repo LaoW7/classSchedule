@@ -78,6 +78,7 @@ public class MainFrm extends JFrame {
 			}
 		});
 		infoMenu.add(mntmNewMenuItem);
+
 		
 		JMenuItem mntmNewMenuItem_1 = new JMenuItem("更新学生信息");
 		mntmNewMenuItem_1.addActionListener(new ActionListener() {
@@ -105,10 +106,23 @@ public class MainFrm extends JFrame {
 		JMenuItem mntmNewMenuItem_3 = new JMenuItem("查询考勤信息");
 		mntmNewMenuItem_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				SearchAttendanceFrm searchAttendanceFrm = new SearchAttendanceFrm();
+				searchAttendanceFrm.setVisible(true);
+				table.add(searchAttendanceFrm);
 			}
 		});
 		kaoqin.add(mntmNewMenuItem_3);
+		
+		JMenuItem mntmNewMenuItem_5 = new JMenuItem("查询考勤信息（学生）");
+		mntmNewMenuItem_5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				StuSearchAttendanceFrm stuSearchAttendanceFrm = new StuSearchAttendanceFrm();
+				stuSearchAttendanceFrm.setVisible(true);
+				table.add(stuSearchAttendanceFrm);
+			}
+		});
+		kaoqin.add(mntmNewMenuItem_5);
+		
 		
 		JMenu mnNewMenu = new JMenu("选课");
 		mnNewMenu.addActionListener(new ActionListener() {
@@ -143,5 +157,12 @@ public class MainFrm extends JFrame {
 				.addComponent(table, GroupLayout.DEFAULT_SIZE, 647, Short.MAX_VALUE)
 		);
 		contentPane.setLayout(gl_contentPane);
+		//如果为学生登陆，则更新课程信息、更新开班信息、更新考勤信息、查询考勤信息不可见
+		if(LoginOnFrm.isAdmin == false){
+			addcourse.setVisible(false);
+			mntmNewMenuItem.setVisible(false);
+			mntmNewMenuItem_2.setVisible(false);
+			mntmNewMenuItem_3.setVisible(false);
+		}
 	}
 }

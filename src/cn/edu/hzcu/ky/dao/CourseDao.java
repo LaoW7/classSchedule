@@ -48,7 +48,7 @@ public class CourseDao {
         }
     }
 
-    public void deleteCourse(String CourseID) throws BaseException{
+    public static int deleteCourse(String CourseID) throws BaseException{
         Connection conn = null;
         try {
             conn = DBUtil.getConnection();
@@ -61,6 +61,18 @@ public class CourseDao {
             }
             rs.close();
             pst.close();
+            
+            // Checking if the CourseID is referenced in the courseregistration table
+            sql = "select * from courseregistration where CourseID = ?";
+            pst = conn.prepareStatement(sql);
+            pst.setString(1, CourseID);
+            rs = pst.executeQuery();
+            if(rs.next()){
+                return 0; // This CourseID is referenced in the courseregistration table and should not be deleted
+            }
+            rs.close();
+            pst.close();
+
             sql = "delete from course where CourseID = ?";
             pst = conn.prepareStatement(sql);
             pst.setString(1, CourseID);
@@ -78,7 +90,9 @@ public class CourseDao {
                 }
             }
         }
+        return 1; // Course was successfully deleted
     }
+
 
     public void addCourse(BeanCourse course) throws BaseException{
         Connection conn = null;

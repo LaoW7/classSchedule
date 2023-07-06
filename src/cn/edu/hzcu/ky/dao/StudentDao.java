@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import javax.naming.spi.DirStateFactory.Result;
 
 import cn.edu.hzcu.ky.model.BeanStudent;
+import cn.edu.hzcu.ky.util.DBUtil;
 import cn.edu.hzcu.ky.util.StringUtil;
 
 
@@ -91,6 +92,38 @@ public class StudentDao {//学生登录
         pstmt.setString(8, student.getEmail());
         return pstmt.executeUpdate();
     }
+
+    public static ResultSet loadAllStudent(Connection conn) throws Exception {
+        String sql = "select * from student";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        ResultSet rs = pstmt.executeQuery();
+
+        return rs;
+    }
+
+    //根据StudentID，查询Name、EnrollmentYear、Major
+    public static BeanStudent searchSpecStudent(String studentID){
+        BeanStudent result = null;
+        try {
+            Connection conn = DBUtil.getConnection();
+            String sql = "select Name,EnrollmentYear,Major from student where StudentID=?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, studentID);
+            ResultSet rs = pstmt.executeQuery();
+            if(rs.next()){
+                result = new BeanStudent();
+                result.setName(rs.getString(1));
+                result.setEnrollmentYear(rs.getString(2));
+                result.setMajor(rs.getString(3));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        return result;
+    }
+
 
     
 //    public void main(String[] args) throws Exception {//The test function test prints the result returned by the login() method
