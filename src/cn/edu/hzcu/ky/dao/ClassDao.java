@@ -151,41 +151,44 @@ public class ClassDao {
         }
 
 
-        //添加选课信息,返回1成功，0失败
+        //添加选课信息,根据studentID，courseID返回1成功，0失败
 
-        public  static  int addCourseRegistration(String studentID,String courseID,String semester,String timeSlot) {
-            int id = 0;
-            Connection conn = null;
-            try {
-                conn = DBUtil.getConnection();
-                String sql = "insert into courseregistration(StudentID,CourseID,Semester,TimeSlot) values(?,?,?,?)";
-                java.sql.PreparedStatement pst = conn.prepareStatement(sql);
-                pst.setString(1, studentID);
-                pst.setString(2, courseID);
-                pst.setString(3, semester);
-                pst.setString(4, timeSlot);
-                pst.execute();
-                pst.close();
-                id=1;
-            } catch (SQLException e) {
-                e.printStackTrace();
-                id=0;
-                try {
-                    throw new DbException(e);
-                } catch (DbException e1) {
-                    e1.printStackTrace();
-                }
-            } finally {
-                if (conn != null) {
-                    try {
-                        conn.close();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            return id;
-        }
+        // public  static  int addCourseRegistration(String studentID,String courseID,String semester,String timeSlot) {
+        //     int id = 0;
+        //     Connection conn = null;
+        //     try {
+        //         conn = DBUtil.getConnection();
+
+        //         //在此处添加互斥判断
+
+        //         String sql = "insert into courseregistration(StudentID,CourseID,Semester,TimeSlot) values(?,?,?,?)";
+        //         java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+        //         pst.setString(1, studentID);
+        //         pst.setString(2, courseID);
+        //         pst.setString(3, semester);
+        //         pst.setString(4, timeSlot);
+        //         pst.execute();
+        //         pst.close();
+        //         id=1;
+        //     } catch (SQLException e) {
+        //         e.printStackTrace();
+        //         id=0;
+        //         try {
+        //             throw new DbException(e);
+        //         } catch (DbException e1) {
+        //             e1.printStackTrace();
+        //         }
+        //     } finally {
+        //         if (conn != null) {
+        //             try {
+        //                 conn.close();
+        //             } catch (SQLException e) {
+        //                 e.printStackTrace();
+        //             }
+        //         }
+        //     }
+        //     return id;
+        // }
         public static int deleteCourseSchedule(String CourseID, String ClassName, String Semester) throws BaseException{
             Connection conn = null;
             try {
@@ -240,5 +243,115 @@ public class ClassDao {
                     }
                 }
             }
+        }
+        public static int addCourseRegistration(String studentID, String courseID, String semester, String timeSlotID) {
+            int id = 0;
+            Connection conn = null;
+            try {
+                conn = DBUtil.getConnection();
+
+                // Check if the student has already registered for a course in the same time slot.
+                String checkSql = "select count(*) from courseregistration where StudentID = ? and TimeSlot = ?";
+                PreparedStatement checkPst = conn.prepareStatement(checkSql);
+                checkPst.setString(1, studentID);
+                checkPst.setString(2, timeSlotID);
+                ResultSet rs = checkPst.executeQuery();
+                if (rs.next() && rs.getInt(1) > 0) {
+                    // There is a conflict.
+                    id=-1;
+                    return id;
+                }
+                rs.close();
+                checkPst.close();
+
+                String sql = "insert into courseregistration(StudentID, CourseID, Semester, TimeSlot) values(?,?,?,?)";
+                PreparedStatement pst = conn.prepareStatement(sql);
+                pst.setString(1, studentID);
+                pst.setString(2, courseID);
+                pst.setString(3, semester);
+                pst.setString(4, timeSlotID);
+                pst.execute();
+                pst.close();
+                id = 1;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                id = 0;
+                try {
+                    throw new DbException(e);
+                } catch (DbException e1) {
+                    e1.printStackTrace();
+                }
+            } finally {
+                if (conn != null) {
+                    try {
+                        conn.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            return id;
+        }
+
+
+        public static int deleteCourseRegistration(String StudentID,String CourseName,String semester,String timeslot){
+            int i = 0;
+            //根据CourseName在classschedule中找到CourseID,根据timeslot(name)在timeslot表中找到TimeSlotID
+            Connection conn = null;
+            try {
+                conn = DBUtil.getConnection();
+                String sql = "select CourseID from classschedule where ClassName = ?";
+                java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+                //System.out.println(CourseName);
+                pst.setString(1, CourseName);
+                java.sql.ResultSet rs = pst.executeQuery();
+                if(!rs.next()){
+                    throw new BaseException("课程不存在");
+                }
+                String courseID = rs.getString("CourseID");
+                rs.close();
+                pst.close();
+
+                sql = "select TimeSlotID from timeslot where TimeSlotName = ?";
+                pst = conn.prepareStatement(sql);
+                pst.setString(1, timeslot);
+                rs = pst.executeQuery();
+                if(!rs.next()){
+                    throw new BaseException("时间段不存在");
+                }
+                String timeSlotID = rs.getString("TimeSlotID");
+                rs.close();
+                pst.close();
+
+                // delete from courseregistration
+                sql = "delete from courseregistration where StudentID = ? and CourseID = ? and Semester = ? and TimeSlot = ?";
+                pst = conn.prepareStatement(sql);
+                pst.setString(1, StudentID);
+                pst.setString(2, courseID);
+                pst.setString(3, semester);
+                pst.setString(4, timeSlotID);
+                pst.execute();
+                pst.close();
+                i = 1;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                i = 0;
+                try {
+                    throw new DbException(e);
+                } catch (DbException e1) {
+                    e1.printStackTrace();
+                }
+            } catch (BaseException e) {
+                e.printStackTrace();
+            } finally{
+                if(conn!=null){
+                    try {
+                        conn.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            return i;
         }
 }

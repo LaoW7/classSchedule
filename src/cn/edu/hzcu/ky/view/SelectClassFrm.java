@@ -26,6 +26,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Window.Type;
+import java.awt.Color;
 
 public class SelectClassFrm extends JFrame {
 
@@ -130,6 +131,16 @@ public class SelectClassFrm extends JFrame {
 		contentPane.add(btnNewButton);
 		contentPane.add(lblNewLabel_3);
 		contentPane.add(scrollPane_1);
+		
+		JButton btnNewButton_1 = new JButton("退选");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				deleteActionPerformed(e);
+			}
+		});
+		btnNewButton_1.setForeground(Color.RED);
+		btnNewButton_1.setBounds(511, 8, 104, 23);
+		contentPane.add(btnNewButton_1);
 
 		fillClassTable();
 		fillYourClassTable();
@@ -219,15 +230,33 @@ public class SelectClassFrm extends JFrame {
 	private void selectActionPerformed(ActionEvent e){
 		int mod = 0;
 		mod = ClassDao.addCourseRegistration(LoginOnFrm.userid, courseid1, term1,timeslot1);
-		// System.out.println(courseid1);
-		// System.out.println(term1);
-		// System.out.println(timeslot1);
+		 System.out.println(courseid1);
+		 System.out.println(term1);
+		 System.out.println(timeslot1);
 		if(mod==1){
 			JOptionPane.showMessageDialog(null, "选课成功！");
 			//fillSelectClassTable();
 			fillYourClassTable();
-		}else{
+		}else if(mod==0){
 			JOptionPane.showMessageDialog(null, "选课失败！");
+		}else if(mod==-1){
+			JOptionPane.showMessageDialog(null, "时间冲突！");
 		}
+	}
+
+	private void deleteActionPerformed(ActionEvent e){
+		int row=table_1.getSelectedRow();//获取选中的行
+		String coursename=table_1.getValueAt(row, 0).toString();
+		String term=table_1.getValueAt(row, 2).toString();
+		String timeslot=table_1.getValueAt(row, 3).toString();
+		int mod = 0;
+		mod = ClassDao.deleteCourseRegistration(LoginOnFrm.userid, coursename, term,timeslot);
+		if(mod==1){
+			JOptionPane.showMessageDialog(null, "退课成功！");
+			fillYourClassTable();
+		}else{
+			JOptionPane.showMessageDialog(null, "退课失败！");
+		}
+
 	}
 }
