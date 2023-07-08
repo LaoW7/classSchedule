@@ -12,7 +12,6 @@ import cn.edu.hzcu.ky.util.DBUtil;
 import cn.edu.hzcu.ky.util.DbException;
 import cn.edu.hzcu.ky.view.LoginOnFrm;
 
-import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
 public class ClassDao {
     public static int addClassSchedule(BeanClassSchedule classSchedule) {
@@ -59,12 +58,13 @@ public class ClassDao {
         Connection conn = null;
         try {
             conn = DBUtil.getConnection();
-            String sql = "insert into detailedclassschedule(ClassScheduleID,TimeSlot,WeekID) values(?,?,?)";
+            String sql = "insert into detailedclassschedule(ClassScheduleID,TimeSlot,WeekID,WeekSlot) values(?,?,?,?)";
 
             java.sql.PreparedStatement pst = conn.prepareStatement(sql);
             pst.setInt(1, bDetailClassSchedule.getClassScheduleID());
             pst.setString(2, bDetailClassSchedule.getTimeSlot());
             pst.setString(3, bDetailClassSchedule.getWeekID());
+            pst.setString(4, bDetailClassSchedule.getWeekSlot());
             pst.execute();
             pst.close();
         } catch (SQLException e) {
@@ -120,7 +120,8 @@ public class ClassDao {
                     "classschedule.IsSpecial AS IsSpecial,\r\n" + //
                     "timeslot.TimeSlotName AS TimeSlotName,\r\n" + //
                     "`week`.WeekName AS WeekName,\r\n" + //
-                    "timeslot.TimeSlotID\r\n" + //
+                    "timeslot.TimeSlotID,\r\n" + //
+                    "detailedclassschedule.WeekSlot\r\n" + //
                     "FROM\r\n" + //
                     "\t(\r\n" + //
                     "\t\t(\r\n" + //
@@ -207,11 +208,20 @@ public class ClassDao {
                 pst.close();
 
                 // Check if the class is selected in the courseregistration table
-                sql = "select count(*) as count from courseregistration where TimeSlot in (select TimeSlot from detailedclassschedule where ClassScheduleID = ?)";
+                System.out.println(classScheduleID);
+                sql = "select count(*) as count\r\n" + //
+                        "from courseregistration\r\n" + //
+                        "WHERE\r\n" + //
+                        "courseregistration.TimeSlot IN ((select TimeSlot from detailedclassschedule where ClassScheduleID = 37)) AND\r\n" + //
+                        "courseregistration.CourseID = ?\r\n" + //
+                        "";
                 pst = conn.prepareStatement(sql);
                 pst.setInt(1, classScheduleID);
+                pst.setString(1, CourseID);
                 rs = pst.executeQuery();
-                if(rs.next() && rs.getInt("count") > 0){
+                rs.next();
+                System.out.println(rs.getInt("count"));
+                if(rs.getInt("count") > 0){
                     return 0;
                 }
                 rs.close();
@@ -250,13 +260,13 @@ public class ClassDao {
             try {
                 conn = DBUtil.getConnection();
 
-                // Check if the student has already registered for a course in the same time slot.
-                String checkSql = "select count(*) from courseregistration where StudentID = ? and TimeSlot = ?";
+                // Check if the student has already registered for a course in the same time slot and same semester.
+                String checkSql = "select count(*) as count,Semester from courseregistration where StudentID = ? and TimeSlot in (select TimeSlotID from timeslot where TimeSlot = ?)";
                 PreparedStatement checkPst = conn.prepareStatement(checkSql);
                 checkPst.setString(1, studentID);
                 checkPst.setString(2, timeSlotID);
                 ResultSet rs = checkPst.executeQuery();
-                if (rs.next() && rs.getInt(1) > 0) {
+                if (rs.next() && rs.getInt(1) > 0 && rs.getString("Semester").equals(semester) ) {
                     // There is a conflict.
                     id=-1;
                     return id;

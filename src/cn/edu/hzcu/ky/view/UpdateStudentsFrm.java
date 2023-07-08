@@ -3,16 +3,12 @@ package cn.edu.hzcu.ky.view;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import java.awt.BorderLayout;
-
-import javax.swing.Action;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;

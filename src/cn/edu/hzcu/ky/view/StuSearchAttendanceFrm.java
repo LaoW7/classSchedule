@@ -11,17 +11,16 @@ import javax.swing.table.DefaultTableModel;
 import cn.edu.hzcu.ky.dao.AttendanceDao;
 import cn.edu.hzcu.ky.dao.StudentDao;
 import cn.edu.hzcu.ky.model.BeanStudent;
-import cn.edu.hzcu.ky.util.DBUtil;
-
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
 import java.awt.event.ActionEvent;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class StuSearchAttendanceFrm extends JInternalFrame {
 	private JTextField startYear;
@@ -39,6 +38,7 @@ public class StuSearchAttendanceFrm extends JInternalFrame {
 	private JTextField enrollmentYear;
 	private JTextField major;
 	private JTable table;
+	private JComboBox<String> comboBox;
 
 	/**
 	 * Launch the application.
@@ -61,8 +61,8 @@ public class StuSearchAttendanceFrm extends JInternalFrame {
 	 */
 	public StuSearchAttendanceFrm() {
 		setClosable(true);
-		setTitle("管理员考勤查询");
-		setBounds(100, 100, 760, 469);
+		setTitle("学生考勤查询");
+		setBounds(100, 100, 797, 469);
 		getContentPane().setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("学生考勤查询");
@@ -241,7 +241,7 @@ public class StuSearchAttendanceFrm extends JInternalFrame {
 		});
 		new_button.setBounds(20, 229, 95, 23);
 		getContentPane().add(new_button);
-		//fillAttendanceTable();
+		
 
 		BeanStudent rs = StudentDao.searchSpecStudent(LoginOnFrm.userid);
 		//为textfield赋值
@@ -250,6 +250,14 @@ public class StuSearchAttendanceFrm extends JInternalFrame {
 		this.enrollmentYear.setText(rs.getEnrollmentYear());
 		this.major.setText(rs.getMajor());
 		
+		comboBox = new JComboBox<String>();
+		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"", "正常", "迟到", "早退", "缺勤", "有课"}));
+		comboBox.setBounds(692, 168, 62, 27);
+		getContentPane().add(comboBox);
+		
+		JLabel lblNewLabel_7 = new JLabel("考勤类型：");
+		lblNewLabel_7.setBounds(626, 174, 71, 15);
+		getContentPane().add(lblNewLabel_7);
 	}
 
 
@@ -275,7 +283,7 @@ public class StuSearchAttendanceFrm extends JInternalFrame {
 			ResultSet rs = null;
 
 			//search all
-			rs = AttendanceDao.searchSpecificAttendance(startYear, startMonth, startDay, startHour, startMinute, endYear, endMonth, endDay, endHour, endMinute, studentId, name, enrollmentYear, major);
+			rs = AttendanceDao.searchSpecificAttendance(startYear, startMonth, startDay, startHour, startMinute, endYear, endMonth, endDay, endHour, endMinute, studentId, name, enrollmentYear, major, comboBox.getSelectedItem().toString());
 			
 			//fill table
 			DefaultTableModel dtm=(DefaultTableModel) table.getModel();
@@ -287,6 +295,8 @@ public class StuSearchAttendanceFrm extends JInternalFrame {
 				v.add(rs.getString("SignInTime"));
 				v.add(rs.getString("SignOutTime"));
 				v.add(rs.getString("AttendanceType"));
+
+
 				dtm.addRow(v);
 			}
 		
@@ -296,32 +306,32 @@ public class StuSearchAttendanceFrm extends JInternalFrame {
 		}
 		
 	}
-	private void fillAttendanceTable() {
-		DefaultTableModel dtm=(DefaultTableModel) table.getModel();
-		dtm.setRowCount(0);//设置成0行
-		Connection con=null;
-		try{
-			con=DBUtil.getConnection();
-			ResultSet rs=AttendanceDao.loadAllAttendance(con);
-			while(rs.next()){
-				Vector<String> v=new Vector<>();
-				v.add(rs.getString("StudentID"));
-				v.add(rs.getString("Date"));
-				v.add(rs.getString("SignInTime"));
-				v.add(rs.getString("SignOutTime"));
-				v.add(rs.getString("AttendanceType"));
-				dtm.addRow(v);
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}finally{
-			try{
-				DBUtil.closeConnection(con);
-			}catch(Exception e){
-				e.printStackTrace();
-			}
-		}
-	}
+	// private void fillAttendanceTable() {
+	// 	DefaultTableModel dtm=(DefaultTableModel) table.getModel();
+	// 	dtm.setRowCount(0);//设置成0行
+	// 	Connection con=null;
+	// 	try{
+	// 		con=DBUtil.getConnection();
+	// 		ResultSet rs=AttendanceDao.loadAllAttendance(con);
+	// 		while(rs.next()){
+	// 			Vector<String> v=new Vector<>();
+	// 			v.add(rs.getString("StudentID"));
+	// 			v.add(rs.getString("Date"));
+	// 			v.add(rs.getString("SignInTime"));
+	// 			v.add(rs.getString("SignOutTime"));
+	// 			v.add(rs.getString("AttendanceType"));
+	// 			dtm.addRow(v);
+	// 		}
+	// 	}catch(Exception e){
+	// 		e.printStackTrace();
+	// 	}finally{
+	// 		try{
+	// 			DBUtil.closeConnection(con);
+	// 		}catch(Exception e){
+	// 			e.printStackTrace();
+	// 		}
+	// 	}
+	// }
 	
 
 }

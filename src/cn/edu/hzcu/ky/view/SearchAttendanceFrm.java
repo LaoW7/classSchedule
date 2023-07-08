@@ -20,6 +20,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
 import java.awt.event.ActionEvent;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class SearchAttendanceFrm extends JInternalFrame {
 	private JTextField startYear;
@@ -37,6 +39,8 @@ public class SearchAttendanceFrm extends JInternalFrame {
 	private JTextField enrollmentYear;
 	private JTextField major;
 	private JTable table;
+	private JComboBox<String> comboBox;
+	private JTable table_1;
 
 	/**
 	 * Launch the application.
@@ -60,7 +64,7 @@ public class SearchAttendanceFrm extends JInternalFrame {
 	public SearchAttendanceFrm() {
 		setClosable(true);
 		setTitle("管理员考勤查询");
-		setBounds(100, 100, 760, 469);
+		setBounds(100, 100, 760, 587);
 		getContentPane().setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("特定考勤查询");
@@ -185,25 +189,25 @@ public class SearchAttendanceFrm extends JInternalFrame {
 		name1.setColumns(10);
 		
 		JLabel lblNewLabel_7_1 = new JLabel("年级：");
-		lblNewLabel_7_1.setBounds(325, 174, 52, 15);
+		lblNewLabel_7_1.setBounds(281, 174, 52, 15);
 		getContentPane().add(lblNewLabel_7_1);
 		
 		enrollmentYear = new JTextField();
 		enrollmentYear.setColumns(10);
-		enrollmentYear.setBounds(364, 171, 81, 21);
+		enrollmentYear.setBounds(320, 171, 81, 21);
 		getContentPane().add(enrollmentYear);
 		
 		JLabel lblNewLabel_7_2 = new JLabel("专业：");
-		lblNewLabel_7_2.setBounds(479, 174, 52, 15);
+		lblNewLabel_7_2.setBounds(411, 174, 52, 15);
 		getContentPane().add(lblNewLabel_7_2);
 		
 		major = new JTextField();
 		major.setColumns(10);
-		major.setBounds(518, 171, 96, 21);
+		major.setBounds(448, 171, 96, 21);
 		getContentPane().add(major);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(0, 253, 754, 189);
+		scrollPane.setBounds(0, 253, 340, 305);
 		getContentPane().add(scrollPane);
 		
 		table = new JTable();
@@ -229,8 +233,64 @@ public class SearchAttendanceFrm extends JInternalFrame {
 				searchActionPerformed(e);
 			}
 		});
-		new_button.setBounds(20, 229, 95, 23);
+		new_button.setBounds(112, 225, 95, 23);
 		getContentPane().add(new_button);
+		
+		comboBox = new JComboBox<String>();
+		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"", "正常", "迟到", "早退", "缺勤", "有课"}));
+		comboBox.setBounds(646, 168, 62, 27);
+		getContentPane().add(comboBox);
+		
+		JLabel lblNewLabel_7 = new JLabel("考勤类型：");
+		lblNewLabel_7.setBounds(573, 174, 71, 15);
+		getContentPane().add(lblNewLabel_7);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(411, 253, 340, 305);
+		getContentPane().add(scrollPane_1);
+		
+		table_1 = new JTable();
+		table_1.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"\u5B66\u751FID", "\u7B7E\u5230\u7C7B\u578B", "\u6B21\u6570\u7EDF\u8BA1"
+			}
+		) {
+			boolean[] columnEditables = new boolean[] {
+				false, false, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
+		scrollPane_1.setViewportView(table_1);
+		
+		JLabel lblNewLabel_8 = new JLabel("详情查询：");
+		lblNewLabel_8.setBounds(20, 212, 76, 15);
+		getContentPane().add(lblNewLabel_8);
+		
+		JLabel lblNewLabel_9 = new JLabel("统计查询：");
+		lblNewLabel_9.setBounds(411, 212, 71, 15);
+		getContentPane().add(lblNewLabel_9);
+		
+		JButton btnNewButton = new JButton("升序查询");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				fillAttendanceTableattendanceTypeAsc();
+			}
+		});
+		btnNewButton.setBounds(448, 225, 95, 23);
+		getContentPane().add(btnNewButton);
+		
+		JButton btnNewButton_1 = new JButton("降序查询");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				fillAttendanceTableattendanceTypeDesc();
+			}
+		});
+		btnNewButton_1.setBounds(602, 225, 95, 23);
+		getContentPane().add(btnNewButton_1);
 		fillAttendanceTable();
 	}
 
@@ -252,12 +312,13 @@ public class SearchAttendanceFrm extends JInternalFrame {
 		String name = this.name1.getText();
 		String enrollmentYear = this.enrollmentYear.getText();
 		String major = this.major.getText();
+		String attendanceType = (String) this.comboBox.getSelectedItem();
 		//search 
 		try {
 			ResultSet rs = null;
 
 			//search all
-			rs = AttendanceDao.searchSpecificAttendance(startYear, startMonth, startDay, startHour, startMinute, endYear, endMonth, endDay, endHour, endMinute, studentId, name, enrollmentYear, major);
+			rs = AttendanceDao.searchSpecificAttendance(startYear, startMonth, startDay, startHour, startMinute, endYear, endMonth, endDay, endHour, endMinute, studentId, name, enrollmentYear, major,attendanceType);
 			
 			//fill table
 			DefaultTableModel dtm=(DefaultTableModel) table.getModel();
@@ -278,6 +339,51 @@ public class SearchAttendanceFrm extends JInternalFrame {
 		}
 		
 	}
+
+	//fillAttendanceTable according to attendanceType
+	private void fillAttendanceTableattendanceTypeAsc(){
+		String attendanceType = (String) this.comboBox.getSelectedItem();
+		try {
+			ResultSet rs = null;
+			rs = AttendanceDao.searchSpecificAttendanceAsc(attendanceType);
+			//fill table
+			DefaultTableModel dtm=(DefaultTableModel) table_1.getModel();
+			dtm.setRowCount(0);//设置成0行
+			while(rs.next()){
+				Vector<String> v=new Vector<>();
+				v.add(rs.getString("StudentID"));
+				v.add(rs.getString("AttendanceType"));
+				v.add(rs.getString("Count"));
+				dtm.addRow(v);
+			}
+		
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+	private void fillAttendanceTableattendanceTypeDesc(){
+		String attendanceType = (String) this.comboBox.getSelectedItem();
+		try {
+			ResultSet rs = null;
+			rs = AttendanceDao.searchSpecificAttendanceDesc(attendanceType);
+			//fill table
+			DefaultTableModel dtm=(DefaultTableModel) table_1.getModel();
+			dtm.setRowCount(0);//设置成0行
+			while(rs.next()){
+				Vector<String> v=new Vector<>();
+				v.add(rs.getString("StudentID"));
+				v.add(rs.getString("AttendanceType"));
+				v.add(rs.getString("Count"));
+				dtm.addRow(v);
+			}
+		
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+
 	private void fillAttendanceTable() {
 		DefaultTableModel dtm=(DefaultTableModel) table.getModel();
 		dtm.setRowCount(0);//设置成0行
@@ -304,5 +410,4 @@ public class SearchAttendanceFrm extends JInternalFrame {
 			}
 		}
 	}
-	
 }

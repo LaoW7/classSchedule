@@ -1,6 +1,6 @@
 package cn.edu.hzcu.ky.model;
 
-import java.util.Date;
+import java.sql.Date;
 
 /*
  * 请假申请表
@@ -12,16 +12,38 @@ import java.util.Date;
   `Reason` varchar(255) DEFAULT NULL,
  */
 public class BeanLeaveApplication {
-    private String LeaveID;
+    private int LeaveID;
     private String StudentID;
     private Date StartDate;
     private Date EndDate;
     private String TimeSlot;
     private String Reason;
-    public String getLeaveID() {
+
+    public BeanLeaveApplication() {
+    }
+    public BeanLeaveApplication(int leaveID, String studentID, Date startDate, Date endDate, String timeSlot,
+            String reason) {
+        LeaveID = leaveID;
+        StudentID = studentID;
+        StartDate = startDate;
+        EndDate = endDate;
+        TimeSlot = timeSlot;
+        Reason = reason;
+    }
+    public BeanLeaveApplication(String studentID, Date startDate, Date endDate, String timeSlot,
+            String reason) {
+        StudentID = studentID;
+        StartDate = startDate;
+        EndDate = endDate;
+        TimeSlot = timeSlot;
+        Reason = reason;
+    }
+
+
+    public int getLeaveID() {
         return LeaveID;
     }
-    public void setLeaveID(String leaveID) {
+    public void setLeaveID(int leaveID) {
         LeaveID = leaveID;
     }
     public String getStudentID() {

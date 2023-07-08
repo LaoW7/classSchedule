@@ -12,16 +12,24 @@ public class BeanDetailClassSchedule {
     private String SerialNumber;
     private String TimeSlot;
     private String WeekID;
+    private String WeekSlot;
 
     public BeanDetailClassSchedule() {
     }
     public BeanDetailClassSchedule(int classScheduleID, String timeSlot,
-            String weekID) {
+            String weekID, String weekSlot) {
         ClassScheduleID = classScheduleID;
         TimeSlot = timeSlot;
         WeekID = weekID;
+        WeekSlot = weekSlot;
     }
 
+    public String getWeekSlot() {
+        return WeekSlot;
+    }
+    public void setWeekSlot(String weekSlot) {
+        WeekSlot = weekSlot;
+    }
     public int getClassScheduleID() {
         return ClassScheduleID;
     }
