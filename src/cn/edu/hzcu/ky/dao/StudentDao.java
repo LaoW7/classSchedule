@@ -3,7 +3,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 
-import javax.naming.spi.DirStateFactory.Result;
+//import javax.naming.spi.DirStateFactory.Result;
 
 import cn.edu.hzcu.ky.model.BeanStudent;
 import cn.edu.hzcu.ky.util.DBUtil;

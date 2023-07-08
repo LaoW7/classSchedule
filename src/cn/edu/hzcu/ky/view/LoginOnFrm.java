@@ -1,6 +1,5 @@
 package cn.edu.hzcu.ky.view;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -17,10 +16,7 @@ import cn.edu.hzcu.ky.util.StringUtil;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.Font;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -61,7 +57,7 @@ public class LoginOnFrm extends JFrame {
 	 */
 	public LoginOnFrm() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 425, 337);
+		setBounds(100, 100, 479, 357);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -105,7 +101,7 @@ public class LoginOnFrm extends JFrame {
 		lblNewLabel_3.setBounds(269, 134, 57, 15);
 		
 		comboBox = new JComboBox<String>();
-		comboBox.setBounds(330, 131, 63, 21);
+		comboBox.setBounds(330, 131, 80, 21);
 		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"学生", "管理员"}));
 
 		contentPane.setLayout(null);

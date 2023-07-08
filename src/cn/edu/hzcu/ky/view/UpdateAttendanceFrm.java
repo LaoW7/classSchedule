@@ -6,7 +6,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
+//import javax.swing.JTextPane;
 
 import cn.edu.hzcu.ky.dao.AttendanceDao;
 import cn.edu.hzcu.ky.dao.StudentDao;

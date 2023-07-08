@@ -3,12 +3,8 @@ package cn.edu.hzcu.ky.view;
 import java.awt.EventQueue;
 
 import javax.swing.JInternalFrame;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.LayoutStyle.ComponentPlacement;
-
 import cn.edu.hzcu.ky.dao.ClassDao;
 import cn.edu.hzcu.ky.dao.CourseDao;
 import cn.edu.hzcu.ky.model.BeanClassSchedule;
@@ -16,14 +12,11 @@ import cn.edu.hzcu.ky.model.BeanCourse;
 import cn.edu.hzcu.ky.model.BeanDetailClassSchedule;
 import cn.edu.hzcu.ky.util.BaseException;
 import cn.edu.hzcu.ky.util.DBUtil;
-import cn.edu.hzcu.ky.util.DbException;
-
 import javax.swing.JRadioButton;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Vector;
 import java.awt.event.ActionEvent;
 import javax.swing.JOptionPane;
@@ -56,6 +49,7 @@ public class UpdateClassRegistrationFrm extends JInternalFrame {
 	private JScrollPane scrollPane;
 	private JTable table;
 	private JTable table_1;
+	private JTextField textField_3;
 	
 
 
@@ -85,34 +79,34 @@ public class UpdateClassRegistrationFrm extends JInternalFrame {
 		setBounds(100, 100, 857, 534);
 		
 		JLabel lblNewLabel = new JLabel("开班课程ID：");
-		lblNewLabel.setBounds(39, 65, 84, 15);
+		lblNewLabel.setBounds(49, 26, 84, 15);
 		
 		textField = new JTextField();
-		textField.setBounds(133, 62, 66, 21);
+		textField.setBounds(143, 23, 66, 21);
 		textField.setColumns(10);
 		
 		textField_1 = new JTextField();
-		textField_1.setBounds(133, 118, 122, 21);
+		textField_1.setBounds(143, 79, 122, 21);
 		textField_1.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("班级名：");
-		lblNewLabel_1.setBounds(61, 121, 57, 15);
+		lblNewLabel_1.setBounds(71, 82, 57, 15);
 		
 		JLabel lblNewLabel_2 = new JLabel("开班学期：");
-		lblNewLabel_2.setBounds(49, 173, 72, 15);
+		lblNewLabel_2.setBounds(59, 134, 72, 15);
 		
 		textField_2 = new JTextField();
-		textField_2.setBounds(131, 170, 66, 21);
+		textField_2.setBounds(141, 131, 66, 21);
 		textField_2.setColumns(10);
 		
 		JLabel lblNewLabel_3 = new JLabel("是否为特色班？");
-		lblNewLabel_3.setBounds(250, 65, 123, 15);
+		lblNewLabel_3.setBounds(260, 26, 123, 15);
 		
 		SpeciallRadioButton_yes = new JRadioButton("是");
-		SpeciallRadioButton_yes.setBounds(373, 61, 48, 23);
+		SpeciallRadioButton_yes.setBounds(360, 22, 48, 23);
 		
 		SpeciallRadioButton_no = new JRadioButton("否");
-		SpeciallRadioButton_no.setBounds(439, 61, 52, 23);
+		SpeciallRadioButton_no.setBounds(431, 22, 52, 23);
 		
 		JLabel lblNewLabel_4 = new JLabel("开班时段：");
 		lblNewLabel_4.setBounds(49, 234, 72, 15);
@@ -201,6 +195,7 @@ public class UpdateClassRegistrationFrm extends JInternalFrame {
 			public void mouseClicked(MouseEvent e) {
 				int row = table.getSelectedRow();
         		textField.setText((String) table.getValueAt(row, 0));
+				textField_1.setText((String) table.getValueAt(row, 1));
 				
 			}
 		});
@@ -233,11 +228,11 @@ public class UpdateClassRegistrationFrm extends JInternalFrame {
 			new Object[][] {
 			},
 			new String[] {
-				"\u8BFE\u7A0BID", "\u73ED\u7EA7\u540D\u79F0", "\u5F00\u73ED\u5B66\u671F", "\u662F\u5426\u4E3A\u7279\u8272\u73ED", "\u5F00\u73ED\u65F6\u6BB5", "\u5F00\u73ED\u65E5\u671F"
+				"\u8BFE\u7A0BID", "\u73ED\u7EA7\u540D\u79F0", "\u5F00\u73ED\u5B66\u671F", "\u662F\u5426\u4E3A\u7279\u8272\u73ED", "\u5F00\u73ED\u65F6\u6BB5", "\u5F00\u73ED\u65E5\u671F", "\u5468\u6BB5"
 			}
 		) {
 			boolean[] columnEditables = new boolean[] {
-				false, false, false, false, false, false
+				false, false, false, false, false, false, false
 			};
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
@@ -284,6 +279,20 @@ public class UpdateClassRegistrationFrm extends JInternalFrame {
 		btnNewButton_1.setBounds(547, 300, 95, 23);
 		getContentPane().add(btnNewButton_1);
 		
+		JLabel lblNewLabel_9 = new JLabel("周段：");
+		lblNewLabel_9.setBounds(82, 182, 48, 15);
+		getContentPane().add(lblNewLabel_9);
+		
+		textField_3 = new JTextField();
+		textField_3.setText("1-16周");
+		textField_3.setBounds(141, 179, 84, 21);
+		getContentPane().add(textField_3);
+		textField_3.setColumns(10);
+		
+		JLabel lblNewLabel_10 = new JLabel("（默认全周，非特殊不更改）");
+		lblNewLabel_10.setBounds(234, 182, 171, 15);
+		getContentPane().add(lblNewLabel_10);
+		
 		fillCourseTable(new BeanCourse());
 		fillClassTable();
 
@@ -307,6 +316,7 @@ public class UpdateClassRegistrationFrm extends JInternalFrame {
 			String courseid=textField.getText();
 			String classname=textField_1.getText();
 			String semester=textField_2.getText();
+			String WeekSlot=textField_3.getText();
 			String time="";
 			String day="";
 			if(timeRadioButton_1.isSelected()) {
@@ -358,7 +368,7 @@ public class UpdateClassRegistrationFrm extends JInternalFrame {
 			//将信息存入数据库
 			BeanClassSchedule bcs = new BeanClassSchedule(courseid,classname,semester,special);
 			int id=ClassDao.addClassSchedule(bcs);
-			BeanDetailClassSchedule bdcs = new BeanDetailClassSchedule(id,time,day);
+			BeanDetailClassSchedule bdcs = new BeanDetailClassSchedule(id,time,day,WeekSlot);
 			ClassDao.addDetailClassSchedule(bdcs);
 
 		}
@@ -411,12 +421,10 @@ public class UpdateClassRegistrationFrm extends JInternalFrame {
 				}
 				v.add(rs.getString(5));
 				v.add(rs.getString(6));
+				v.add(rs.getString(8));
 				dtm.addRow(v);
 				}
 			} catch (Exception e) {
 		}
 	}
-
-	
-
 }

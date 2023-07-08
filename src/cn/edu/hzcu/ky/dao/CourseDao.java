@@ -4,7 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.naming.spi.DirStateFactory.Result;
+//import javax.naming.spi.DirStateFactory.Result;
 
 /*
  * Implement the operation of adding, deleting, modifying, and querying the course database.

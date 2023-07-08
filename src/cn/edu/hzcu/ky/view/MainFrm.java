@@ -1,25 +1,14 @@
 package cn.edu.hzcu.ky.view;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.awt.Font;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JToolBar;
-import javax.swing.GroupLayout;
-import javax.swing.JButton;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JLabel;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import javax.swing.JTable;
 
 public class MainFrm extends JFrame {
@@ -47,7 +36,7 @@ public class MainFrm extends JFrame {
 	 * Create the frame.
 	 */
 	public MainFrm() {
-		setTitle("选课系统");
+		setTitle("考勤选课系统");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1160, 717);
 		
@@ -58,7 +47,7 @@ public class MainFrm extends JFrame {
 		JMenu infoMenu = new JMenu("信息维护");
 		menuBar.add(infoMenu);
 		
-		JMenuItem addcourse = new JMenuItem("更新课程信息");
+		JMenuItem addcourse = new JMenuItem("更新课程信息（管理员）");
 		
 		addcourse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -69,7 +58,7 @@ public class MainFrm extends JFrame {
 		});
 		infoMenu.add(addcourse);
 		
-		JMenuItem mntmNewMenuItem = new JMenuItem("更新开班信息");
+		JMenuItem mntmNewMenuItem = new JMenuItem("更新开班信息（管理员）");
 		mntmNewMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				UpdateClassRegistrationFrm classRegistrationFrm = new UpdateClassRegistrationFrm();
@@ -93,7 +82,7 @@ public class MainFrm extends JFrame {
 		JMenu kaoqin = new JMenu("考勤");
 		menuBar.add(kaoqin);
 		
-		JMenuItem mntmNewMenuItem_2 = new JMenuItem("更新考勤信息");
+		JMenuItem mntmNewMenuItem_2 = new JMenuItem("更新考勤信息（管理员）");
 		mntmNewMenuItem_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				UpdateAttendanceFrm attendanceFrm = new UpdateAttendanceFrm();
@@ -101,9 +90,20 @@ public class MainFrm extends JFrame {
 				table.add(attendanceFrm);
 			}
 		});
+		
+		JMenuItem mntmNewMenuItem_8 = new JMenuItem("一键签到（学生）");
+		mntmNewMenuItem_8.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				OneClickAttendanceFrm oneClickAttendanceFrm = new OneClickAttendanceFrm();
+				oneClickAttendanceFrm.setVisible(true);
+				table.add(oneClickAttendanceFrm);
+				
+			}
+		});
+		kaoqin.add(mntmNewMenuItem_8);
 		kaoqin.add(mntmNewMenuItem_2);
 		
-		JMenuItem mntmNewMenuItem_3 = new JMenuItem("查询考勤信息");
+		JMenuItem mntmNewMenuItem_3 = new JMenuItem("查询考勤信息（管理员）");
 		mntmNewMenuItem_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SearchAttendanceFrm searchAttendanceFrm = new SearchAttendanceFrm();
@@ -123,6 +123,9 @@ public class MainFrm extends JFrame {
 		});
 		kaoqin.add(mntmNewMenuItem_5);
 		
+		JMenuItem mntmNewMenuItem_7 = new JMenuItem("考勤监控（管理员）");
+		kaoqin.add(mntmNewMenuItem_7);
+		
 		
 		JMenu mnNewMenu = new JMenu("选课");
 		mnNewMenu.addActionListener(new ActionListener() {
@@ -139,30 +142,38 @@ public class MainFrm extends JFrame {
 			}
 		});
 		mnNewMenu.add(mntmNewMenuItem_4);
+		
+		JMenu mnNewMenu_1 = new JMenu("请假");
+		menuBar.add(mnNewMenu_1);
+		
+		JMenuItem mntmNewMenuItem_6 = new JMenuItem("填写请假");
+		mntmNewMenuItem_6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UpdateLeaveApplicationFrm leaveApplicationFrm = new UpdateLeaveApplicationFrm();
+				leaveApplicationFrm.setVisible(true);
+				table.add(leaveApplicationFrm);
+				
+			}
+		});
+		mnNewMenu_1.add(mntmNewMenuItem_6);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
+		contentPane.setLayout(null);
 		
 		table = new JTable();
+		table.setBounds(5, 5, 1126, 647);
 		table.setColumnSelectionAllowed(true);
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addComponent(table, GroupLayout.DEFAULT_SIZE, 1126, Short.MAX_VALUE)
-					.addContainerGap())
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addComponent(table, GroupLayout.DEFAULT_SIZE, 647, Short.MAX_VALUE)
-		);
-		contentPane.setLayout(gl_contentPane);
+		contentPane.add(table);
 		//如果为学生登陆，则更新课程信息、更新开班信息、更新考勤信息、查询考勤信息不可见
 		if(LoginOnFrm.isAdmin == false){
 			addcourse.setVisible(false);
 			mntmNewMenuItem.setVisible(false);
 			mntmNewMenuItem_2.setVisible(false);
 			mntmNewMenuItem_3.setVisible(false);
+		}else if(LoginOnFrm.isAdmin == true){
+			mntmNewMenuItem_5.setVisible(false);
+			
 		}
 	}
 }

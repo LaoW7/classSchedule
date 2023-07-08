@@ -1,18 +1,15 @@
 package cn.edu.hzcu.ky.view;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JScrollPane;
-import javax.swing.JToolBar;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -20,12 +17,9 @@ import cn.edu.hzcu.ky.dao.ClassDao;
 import cn.edu.hzcu.ky.util.DBUtil;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.Window.Type;
 import java.awt.Color;
 
 public class SelectClassFrm extends JFrame {
@@ -36,6 +30,7 @@ public class SelectClassFrm extends JFrame {
 	String classname;
 	String courseid1;
 	String term1;
+	public static String isSpecial;
 	String timeslot1;
 	private JTable table_1;
 
@@ -61,13 +56,13 @@ public class SelectClassFrm extends JFrame {
 	public SelectClassFrm() {
 		setTitle("选课");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 717, 508);
+		setBounds(100, 100, 830, 508);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(15, 214, 702, 242);
+		scrollPane.setBounds(15, 214, 757, 242);
 		
 		JLabel lblNewLabel = new JLabel("你好，");
 		lblNewLabel.setBounds(15, 56, 43, 15);
@@ -117,9 +112,16 @@ public class SelectClassFrm extends JFrame {
 			new Object[][] {
 			},
 			new String[] {
-				"\u8BFE\u7A0BID", "\u8BFE\u7A0B\u540D", "\u662F\u5426\u4E3A\u7279\u8272\u73ED", "\u4E0A\u8BFE\u5B66\u671F", "\u65F6\u95F4\u6BB5", "\u5468", "\u5468ID"
+				"\u8BFE\u7A0BID", "\u8BFE\u7A0B\u540D", "\u662F\u5426\u4E3A\u7279\u8272\u73ED", "\u4E0A\u8BFE\u5B66\u671F", "\u65F6\u95F4\u6BB5", "\u5468", "\u5468ID", "\u5468\u6BB5"
 			}
-		));
+		) {
+			boolean[] columnEditables = new boolean[] {
+				true, true, true, true, true, true, true, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
 		table.getColumnModel().getColumn(2).setPreferredWidth(88);
 		contentPane.setLayout(null);
 		scrollPane.setViewportView(table);
@@ -200,6 +202,7 @@ public class SelectClassFrm extends JFrame {
 				v.add(rs.getString(5));
 				v.add(rs.getString(6));
 				v.add(rs.getString(7));
+				v.add(rs.getString(8));
 				dtm.addRow(v);
 			}
 		} catch (Exception e) {
@@ -219,7 +222,7 @@ public class SelectClassFrm extends JFrame {
 		courseid1 = courseId;
 		String className=table.getValueAt(row, 1).toString();
 		classname = className;
-		//String isSpecial=table.getValueAt(row, 2).toString();
+		isSpecial=table.getValueAt(row, 2).toString();
 		String term=table.getValueAt(row, 3).toString();
 		term1 = term;
 		String timeslot=table.getValueAt(row, 6).toString();
@@ -230,17 +233,43 @@ public class SelectClassFrm extends JFrame {
 	private void selectActionPerformed(ActionEvent e){
 		int mod = 0;
 		mod = ClassDao.addCourseRegistration(LoginOnFrm.userid, courseid1, term1,timeslot1);
-		 System.out.println(courseid1);
-		 System.out.println(term1);
-		 System.out.println(timeslot1);
+		System.out.println(courseid1);
+		System.out.println(term1);
+		System.out.println(timeslot1);
+
+		if(isSpecial=="是") {
+			try {
+			Connection conn = DBUtil.getConnection();
+
+            // Check if the student has already registered for a course in the same time slot and same semester.
+            String checkSql = "select count(*) as count,Semester from courseregistration where StudentID = ? and TimeSlot in (select TimeSlotID from timeslot where TimeSlot = ?)";
+            PreparedStatement checkPst = conn.prepareStatement(checkSql);
+            checkPst.setString(1, LoginOnFrm.userid);
+            checkPst.setString(2, timeslot1);
+            ResultSet rs = checkPst.executeQuery();
+            if (rs.next() && rs.getInt(1) > 0 && rs.getString("Semester").equals(term1) ) {
+                // There is a conflict.
+                mod=-2;
+            }
+            rs.close();
+            checkPst.close();
+			}catch(Exception e1){
+				e1.printStackTrace();
+			}
+		}
+		
+
+
+
 		if(mod==1){
 			JOptionPane.showMessageDialog(null, "选课成功！");
-			//fillSelectClassTable();
 			fillYourClassTable();
 		}else if(mod==0){
 			JOptionPane.showMessageDialog(null, "选课失败！");
 		}else if(mod==-1){
 			JOptionPane.showMessageDialog(null, "时间冲突！");
+		}else if(mod==-2){
+			JOptionPane.showMessageDialog(null, "你选择的是特色班，且和普通课程时间冲突，将为您自动请假！");
 		}
 	}
 

@@ -3,8 +3,6 @@ package cn.edu.hzcu.ky.view;
 import java.awt.EventQueue;
 
 import javax.swing.JInternalFrame;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -14,7 +12,6 @@ import cn.edu.hzcu.ky.model.BeanCourse;
 import cn.edu.hzcu.ky.util.BaseException;
 import cn.edu.hzcu.ky.util.DBUtil;
 
-import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.Color;
 import javax.swing.border.BevelBorder;
 import javax.swing.JLabel;
@@ -24,8 +21,6 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Vector;
 import java.awt.event.ActionEvent;
 
