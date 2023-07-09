@@ -4,6 +4,8 @@ import java.awt.EventQueue;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -313,6 +315,25 @@ public class SearchAttendanceFrm extends JInternalFrame {
 		String enrollmentYear = this.enrollmentYear.getText();
 		String major = this.major.getText();
 		String attendanceType = (String) this.comboBox.getSelectedItem();
+		//结束时间不大于开始时间
+		if(!"".equals(endYear)&&!"".equals(startYear)){
+			if(Integer.parseInt(endYear)<Integer.parseInt(startYear)) {
+				JOptionPane.showMessageDialog(null, "结束时间不能小于开始时间");
+				return;
+			}
+		}
+		if(!"".equals(endMonth)&&!"".equals(startMonth)){
+			if(Integer.parseInt(endMonth)<Integer.parseInt(startMonth)){
+				JOptionPane.showMessageDialog(null, "结束时间不能小于开始时间");
+				return;
+			}
+		}
+		if(!"".equals(endDay)&&!"".equals(startDay)){
+			if(Integer.parseInt(endYear)==Integer.parseInt(startYear)&&Integer.parseInt(endMonth)==Integer.parseInt(startMonth)&&Integer.parseInt(endDay)<Integer.parseInt(startDay)){
+				JOptionPane.showMessageDialog(null, "结束时间不能小于开始时间");
+				return;
+			}
+		}
 		//search 
 		try {
 			ResultSet rs = null;

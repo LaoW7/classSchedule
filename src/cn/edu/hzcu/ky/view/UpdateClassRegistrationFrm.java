@@ -293,6 +293,19 @@ public class UpdateClassRegistrationFrm extends JInternalFrame {
 		lblNewLabel_10.setBounds(234, 182, 171, 15);
 		getContentPane().add(lblNewLabel_10);
 		
+		JLabel lblNewLabel_11 = new JLabel("格式：（2023-2024第一学期，请填写20231）");
+		lblNewLabel_11.setBounds(217, 134, 266, 15);
+		getContentPane().add(lblNewLabel_11);
+		
+		JLabel lblNewLabel_12 = new JLabel("（自动填充课程名，后面记得加班名）");
+		lblNewLabel_12.setBounds(275, 82, 208, 15);
+		getContentPane().add(lblNewLabel_12);
+		
+		JLabel lblNewLabel_13 = new JLabel("无需输入，右侧可点选");
+		lblNewLabel_13.setForeground(Color.RED);
+		lblNewLabel_13.setBounds(69, 51, 137, 15);
+		getContentPane().add(lblNewLabel_13);
+		
 		fillCourseTable(new BeanCourse());
 		fillClassTable();
 
