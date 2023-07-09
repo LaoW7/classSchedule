@@ -123,14 +123,11 @@ public class MainFrm extends JFrame {
 		});
 		kaoqin.add(mntmNewMenuItem_5);
 		
-		JMenuItem mntmNewMenuItem_7 = new JMenuItem("考勤监控（管理员）");
-		kaoqin.add(mntmNewMenuItem_7);
-		
 		
 		JMenu mnNewMenu = new JMenu("选课");
 		mnNewMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new SelectClassFrm().setVisible(true);
+				//new SelectClassFrm().setVisible(true);
 			}
 		});
 		menuBar.add(mnNewMenu);
@@ -171,8 +168,11 @@ public class MainFrm extends JFrame {
 			mntmNewMenuItem.setVisible(false);
 			mntmNewMenuItem_2.setVisible(false);
 			mntmNewMenuItem_3.setVisible(false);
+
 		}else if(LoginOnFrm.isAdmin == true){
 			mntmNewMenuItem_5.setVisible(false);
+			mnNewMenu.setVisible(false);
+			mntmNewMenuItem_8.setVisible(false);
 			
 		}
 	}

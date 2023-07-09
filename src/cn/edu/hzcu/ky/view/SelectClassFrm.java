@@ -233,9 +233,9 @@ public class SelectClassFrm extends JFrame {
 	private void selectActionPerformed(ActionEvent e){
 		int mod = 0;
 		mod = ClassDao.addCourseRegistration(LoginOnFrm.userid, courseid1, term1,timeslot1);
-		System.out.println(courseid1);
-		System.out.println(term1);
-		System.out.println(timeslot1);
+		// System.out.println(courseid1);
+		// System.out.println(term1);
+		// System.out.println(timeslot1);
 
 		if(isSpecial=="是") {
 			try {
@@ -266,11 +266,18 @@ public class SelectClassFrm extends JFrame {
 			fillYourClassTable();
 		}else if(mod==0){
 			JOptionPane.showMessageDialog(null, "选课失败！");
+			fillYourClassTable();
 		}else if(mod==-1){
 			JOptionPane.showMessageDialog(null, "时间冲突！");
+			fillYourClassTable();
 		}else if(mod==-2){
 			JOptionPane.showMessageDialog(null, "你选择的是特色班，且和普通课程时间冲突，将为您自动请假！");
+			fillYourClassTable();
+		}else if(mod==-3){
+			JOptionPane.showMessageDialog(null, "同类课程一学期只能选一节!");
+			fillYourClassTable();
 		}
+
 	}
 
 	private void deleteActionPerformed(ActionEvent e){

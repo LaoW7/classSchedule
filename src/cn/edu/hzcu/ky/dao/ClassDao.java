@@ -11,6 +11,7 @@ import cn.edu.hzcu.ky.util.BaseException;
 import cn.edu.hzcu.ky.util.DBUtil;
 import cn.edu.hzcu.ky.util.DbException;
 import cn.edu.hzcu.ky.view.LoginOnFrm;
+import cn.edu.hzcu.ky.view.SelectClassFrm;
 
 
 public class ClassDao {
@@ -259,20 +260,29 @@ public class ClassDao {
             Connection conn = null;
             try {
                 conn = DBUtil.getConnection();
+                //System.out.println(SelectClassFrm.isSpecial);
+                if(SelectClassFrm.isSpecial=="否"){
+                    // Check if the student has already registered for a course in the same time slot and same semester.
+                    String checkSql = "select count(*) as count,Semester,CourseID from courseregistration where StudentID = ? and TimeSlot  = ?";
+                    PreparedStatement checkPst = conn.prepareStatement(checkSql);
+                    checkPst.setString(1, studentID);
+                    checkPst.setString(2, timeSlotID);
+                    ResultSet rs = checkPst.executeQuery();
 
-                // Check if the student has already registered for a course in the same time slot and same semester.
-                String checkSql = "select count(*) as count,Semester from courseregistration where StudentID = ? and TimeSlot in (select TimeSlotID from timeslot where TimeSlot = ?)";
-                PreparedStatement checkPst = conn.prepareStatement(checkSql);
-                checkPst.setString(1, studentID);
-                checkPst.setString(2, timeSlotID);
-                ResultSet rs = checkPst.executeQuery();
-                if (rs.next() && rs.getInt(1) > 0 && rs.getString("Semester").equals(semester) ) {
-                    // There is a conflict.
-                    id=-1;
-                    return id;
+                    if (rs.next() && rs.getInt(1) > 0 && rs.getString("Semester").equals(semester) && rs.getString("CourseID").equals(courseID) ) {
+
+
+                        id=-3;
+                        return id;
+                    }else if(rs.getInt(1) > 0 && rs.getString("Semester").equals(semester)){
+                        id=-1;
+                        return id;
+                    }
+                    rs.close();
+                    checkPst.close();
                 }
-                rs.close();
-                checkPst.close();
+
+                
 
                 String sql = "insert into courseregistration(StudentID, CourseID, Semester, TimeSlot) values(?,?,?,?)";
                 PreparedStatement pst = conn.prepareStatement(sql);

@@ -56,6 +56,7 @@ public class OneClickAttendanceFrm extends JInternalFrame {
 	 * Create the frame.
 	 */
 	public OneClickAttendanceFrm() {
+		setClosable(true);
 		setTitle("一键签到");
 		setBounds(100, 100, 694, 372);
 		getContentPane().setLayout(null);

@@ -24,6 +24,7 @@ import java.sql.Connection;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JPasswordField;
 
 public class LoginOnFrm extends JFrame {
 	public static String userid;
@@ -31,10 +32,10 @@ public class LoginOnFrm extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField;
-	private JTextField textField_1;
 	private JComboBox<String> comboBox;
 	private StudentDao studentDao = new StudentDao();
 	private AdministratorDao administratorDao = new AdministratorDao();
+	private JPasswordField passwordField;
 
 	/**
 	 * Launch the application.
@@ -73,10 +74,6 @@ public class LoginOnFrm extends JFrame {
 		textField.setBounds(120, 131, 139, 21);
 		textField.setColumns(10);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(120, 175, 139, 21);
-		textField_1.setColumns(10);
-		
 		JLabel lblNewLabel_2 = new JLabel("选课考勤系统");
 		lblNewLabel_2.setBounds(123, 54, 158, 43);
 		lblNewLabel_2.setFont(new Font("楷体", Font.PLAIN, 26));
@@ -108,23 +105,26 @@ public class LoginOnFrm extends JFrame {
 		contentPane.add(lblNewLabel_2);
 		contentPane.add(lblNewLabel_1);
 		contentPane.add(lblNewLabel);
-		contentPane.add(textField_1);
 		contentPane.add(textField);
 		contentPane.add(lblNewLabel_3);
 		contentPane.add(btnNewButton);
 		contentPane.add(btnNewButton_1);
 		contentPane.add(comboBox);
+		
+		passwordField = new JPasswordField();
+		passwordField.setBounds(123, 175, 136, 21);
+		contentPane.add(passwordField);
 	}
 
 	protected void resetActionPerformed(ActionEvent arg1) {//清空账号和密码
 		this.textField.setText("");
-		this.textField_1.setText("");
+		this.passwordField.setText("");
 	}
 
 	private void loginActionPerformed(ActionEvent arg0) {//登录事件
 		String name=this.textField.getText();
-		String password=this.textField_1.getText();
-		//System.out.println(name+","+password);
+		String password=new String(this.passwordField.getPassword());
+		System.out.println(name+","+password);
 		if(StringUtil.isEmpty(name)) {
 			JOptionPane.showMessageDialog(null, "账号不能为空");
 			return;
