@@ -33,6 +33,7 @@ public class SelectClassFrm extends JFrame {
 	public static String isSpecial;
 	String timeslot1;
 	private JTable table_1;
+	String weekID;
 
 	/**
 	 * Launch the application.
@@ -227,12 +228,35 @@ public class SelectClassFrm extends JFrame {
 		term1 = term;
 		String timeslot=table.getValueAt(row, 6).toString();
 		timeslot1 = timeslot;
-		//String week=table.getValueAt(row, 5).toString()
+		String week=table.getValueAt(row, 5).toString();
+
+		if(week.equals("周一")) {
+			weekID = "001";
+		}
+		if(week.equals("周二")) {
+			weekID = "002";
+		}
+		if(week.equals("周三")) {
+			weekID = "003";
+		}
+		if(week.equals("周四")) {
+			weekID = "004";
+		}
+		if(week.equals("周五")) {
+			weekID = "005";
+		}
+		if(week.equals("周六")) {
+			weekID = "006";
+		}
+		if(week.equals("周日")) {
+			weekID = "007";
+		}
+
 		
 	}
 	private void selectActionPerformed(ActionEvent e){
 		int mod = 0;
-		mod = ClassDao.addCourseRegistration(LoginOnFrm.userid, courseid1, term1,timeslot1);
+		mod = ClassDao.addCourseRegistration(LoginOnFrm.userid, courseid1, term1,timeslot1,weekID);
 		// System.out.println(courseid1);
 		// System.out.println(term1);
 		// System.out.println(timeslot1);

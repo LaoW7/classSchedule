@@ -213,12 +213,12 @@ public class ClassDao {
                 sql = "select count(*) as count\r\n" + //
                         "from courseregistration\r\n" + //
                         "WHERE\r\n" + //
-                        "courseregistration.TimeSlot IN ((select TimeSlot from detailedclassschedule where ClassScheduleID = 37)) AND\r\n" + //
+                        "courseregistration.TimeSlot IN ((select TimeSlot from detailedclassschedule where ClassScheduleID = ?)) AND\r\n" + //
                         "courseregistration.CourseID = ?\r\n" + //
                         "";
                 pst = conn.prepareStatement(sql);
                 pst.setInt(1, classScheduleID);
-                pst.setString(1, CourseID);
+                pst.setString(2, CourseID);
                 rs = pst.executeQuery();
                 rs.next();
                 System.out.println(rs.getInt("count"));
@@ -255,7 +255,7 @@ public class ClassDao {
                 }
             }
         }
-        public static int addCourseRegistration(String studentID, String courseID, String semester, String timeSlotID) {
+        public static int addCourseRegistration(String studentID, String courseID, String semester, String timeSlotID,String weekID) {
             int id = 0;
             Connection conn = null;
             try {
@@ -263,21 +263,34 @@ public class ClassDao {
                 //System.out.println(SelectClassFrm.isSpecial);
                 if(SelectClassFrm.isSpecial=="否"){
                     // Check if the student has already registered for a course in the same time slot and same semester.
-                    String checkSql = "select count(*) as count,Semester,CourseID from courseregistration where StudentID = ? and TimeSlot  = ?";
+                    String checkSql = "SELECT\r\n" + //
+                            "\tCOUNT(*) AS count,\r\n" + //
+                            "\tcourseregistration.Semester AS Semester,\r\n" + //
+                            "\tcourseregistration.CourseID AS CourseID,\r\n" + //
+                            "\tdetailedclassschedule.WeekID AS WeekID\r\n" + //
+                            "FROM\r\n" + //
+                            "\tcourseregistration\r\n" + //
+                            "INNER JOIN detailedclassschedule ON courseregistration.TimeSlot = detailedclassschedule.TimeSlot\r\n" + //
+                            "INNER JOIN classschedule ON detailedclassschedule.ClassScheduleID = classschedule.ClassScheduleID\r\n" + //
+                            "INNER JOIN course ON courseregistration.CourseID = course.CourseID\r\n" + //
+                            "AND classschedule.CourseID = course.CourseID\r\n" + //
+                            "WHERE\r\n" + //
+                            "\tcourseregistration.StudentID = ?\r\n" + //
+                            "AND courseregistration.TimeSlot = ?";
                     PreparedStatement checkPst = conn.prepareStatement(checkSql);
                     checkPst.setString(1, studentID);
                     checkPst.setString(2, timeSlotID);
                     ResultSet rs = checkPst.executeQuery();
 
-                    if (rs.next() && rs.getInt(1) > 0 && rs.getString("Semester").equals(semester) && rs.getString("CourseID").equals(courseID) ) {
-
-
+                    if (rs.next() && rs.getInt(1) > 0 && rs.getString("Semester").equals(semester) && rs.getString("CourseID").equals(courseID)&& rs.getString("WeekID").equals(weekID)  ) {
+                       
                         id=-3;
                         return id;
-                    }else if(rs.getInt(1) > 0 && rs.getString("Semester").equals(semester)){
+                    }else if(rs.getInt(1) > 0 && rs.getString("Semester").equals(semester) && rs.getString("WeekID").equals(weekID)){
                         id=-1;
                         return id;
                     }
+                     System.out.println(rs.getString("Semester")+"=="+semester+"=="+rs.getString("CourseID")+"=="+courseID);
                     rs.close();
                     checkPst.close();
                 }
