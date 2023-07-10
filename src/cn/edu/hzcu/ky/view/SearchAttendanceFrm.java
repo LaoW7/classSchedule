@@ -20,6 +20,8 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
@@ -294,9 +296,21 @@ public class SearchAttendanceFrm extends JInternalFrame {
 		btnNewButton_1.setBounds(602, 225, 95, 23);
 		getContentPane().add(btnNewButton_1);
 		fillAttendanceTable();
+		timer();
 	}
 
-
+	//设置一个每隔3秒刷新的计时器
+	private void timer() {
+		// TODO Auto-generated method stub
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				fillAttendanceTable();
+			}
+		}, 0, 15000);
+	}
 	//提取所有textfield,并完成搜索
 	private void searchActionPerformed(ActionEvent e){
 		//get all textfield
