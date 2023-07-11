@@ -220,7 +220,7 @@ public class UpdateClassRegistrationFrm extends JInternalFrame {
 		getContentPane().add(lblNewLabel_6);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(219, 328, 618, 167);
+		scrollPane_1.setBounds(166, 328, 671, 167);
 		getContentPane().add(scrollPane_1);
 		
 		table_1 = new JTable();

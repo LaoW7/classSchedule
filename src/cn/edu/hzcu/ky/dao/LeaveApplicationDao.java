@@ -74,4 +74,25 @@ public class LeaveApplicationDao {
         }
         return result;
     }
+    //根据semester表中的semesterID查询StartDate和EndDate
+    public static String searchDate(String semesterIDString){
+        String result = null;
+        String sql = "select StartDate,EndDate from semester where SemesterID = ?";
+        Connection conn = null;
+        try {
+            conn = DBUtil.getConnection();
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, semesterIDString);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                result = rs.getString(1) + "至" + rs.getString(2);
+            }
+            pst.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+
 }

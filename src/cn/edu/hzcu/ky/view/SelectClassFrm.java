@@ -2,8 +2,11 @@ package cn.edu.hzcu.ky.view;
 
 import java.awt.EventQueue;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Vector;
 
 import javax.swing.JFrame;
@@ -14,6 +17,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import cn.edu.hzcu.ky.dao.ClassDao;
+import cn.edu.hzcu.ky.dao.LeaveApplicationDao;
+import cn.edu.hzcu.ky.model.BeanLeaveApplication;
 import cn.edu.hzcu.ky.util.DBUtil;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -88,10 +93,10 @@ public class SelectClassFrm extends JFrame {
 		});
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(298, 33, 391, 175);
+		scrollPane_1.setBounds(218, 33, 471, 175);
 		
 		JLabel lblNewLabel_3 = new JLabel("你的选课信息：");
-		lblNewLabel_3.setBounds(298, 12, 108, 15);
+		lblNewLabel_3.setBounds(218, 12, 108, 15);
 		
 		table_1 = new JTable();
 		table_1.setModel(new DefaultTableModel(
@@ -142,7 +147,7 @@ public class SelectClassFrm extends JFrame {
 			}
 		});
 		btnNewButton_1.setForeground(Color.RED);
-		btnNewButton_1.setBounds(511, 8, 104, 23);
+		btnNewButton_1.setBounds(398, 8, 104, 23);
 		contentPane.add(btnNewButton_1);
 
 		fillClassTable();
@@ -274,15 +279,38 @@ public class SelectClassFrm extends JFrame {
             if (rs.next() && rs.getInt(1) > 0 && rs.getString("Semester").equals(term1) ) {
                 // There is a conflict.
                 mod=-2;
+
+				//自动请假
+				String result = LeaveApplicationDao.searchDate(term1);
+
+				 // 提取起始日期和结束日期的字符串
+        		String[] dateRange = result.split("至");
+        		String startDateStr = dateRange[0];
+        		String endDateStr = dateRange[1];
+
+        		// 转换为 java.sql.Date 对象
+        		Date startDate = Date.valueOf(LocalDate.parse(startDateStr, DateTimeFormatter.ISO_LOCAL_DATE));
+        		Date endDate = Date.valueOf(LocalDate.parse(endDateStr, DateTimeFormatter.ISO_LOCAL_DATE));
+
+
+				System.out.println(	result);
+				BeanLeaveApplication leaveApplication = new BeanLeaveApplication();
+				leaveApplication.setStudentID(LoginOnFrm.userid);
+				leaveApplication.setTimeSlot(timeslot1);
+				leaveApplication.setStartDate(startDate);
+				leaveApplication.setEndDate(endDate);
+				leaveApplication.setReason("特色班请假");
+
+				LeaveApplicationDao.addLeaveApplication(leaveApplication);
             }
             rs.close();
             checkPst.close();
+			
 			}catch(Exception e1){
 				e1.printStackTrace();
 			}
 		}
 		
-
 
 
 		if(mod==1){
